@@ -15,6 +15,7 @@ export default function BookingPage() {
   const [venue, setVenue] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
   // Form State
   const [formData, setFormData] = useState({
@@ -24,11 +25,20 @@ export default function BookingPage() {
     special_requests: ""
   });
 
+  // ✅ Check authentication on mount
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to login page with return URL
+      router.push(`/login?returnUrl=/venues/${id}/book`);
+      return;
+    }
+    setIsCheckingAuth(false);
+    
     const name = localStorage.getItem("user_name");
     setUserName(name || 'User');
     fetchVenueDetails();
-  }, [id]);
+  }, [id, router]);
 
   const fetchVenueDetails = async () => {
     try {
@@ -50,16 +60,15 @@ export default function BookingPage() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     
+    // Double-check token (should exist because we already checked)
     if (!token) {
-      alert("Please login to book this venue.");
-      router.push('/login');
+      router.push(`/login?returnUrl=/venues/${id}/book`);
       return;
     }
 
     try {
       const finalAmount = calculateTotal();
       
-      // FIXED: Sending 'total_amount' instead of 'total_price' to match backend validation
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/bookings`, {
         venue_id: id,
         event_date: formData.event_date,
@@ -72,12 +81,21 @@ export default function BookingPage() {
       });
 
       alert("Booking request submitted! The owner will review it shortly.");
-      router.push('/my-bookings'); // Redirect to user's bookings list
+      router.push('/my-bookings');
     } catch (error: any) {
       console.error("Booking Error:", error.response?.data);
       alert(error.response?.data?.message || "Something went wrong.");
     }
   };
+
+  // Show loading while checking auth
+  if (isCheckingAuth) {
+    return (
+      <div className="p-20 text-center animate-pulse font-bold">
+        Checking authentication...
+      </div>
+    );
+  }
 
   if (loading) return <div className="p-20 text-center animate-pulse font-bold">Loading venue details...</div>;
   if (!venue) return <div className="p-20 text-center">Venue not found.</div>;

@@ -1,12 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnUrl = searchParams.get('returnUrl'); // Get returnUrl from query
+
   const [formData, setFormData] = useState({
     login: "",
     password: "",
@@ -14,6 +17,15 @@ export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Pre-fill remembered email if exists
+  useEffect(() => {
+    const remembered = localStorage.getItem("remembered_email");
+    if (remembered) {
+      setFormData(prev => ({ ...prev, login: remembered }));
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,22 +46,30 @@ export default function Login() {
       localStorage.setItem("token", token);
       localStorage.setItem("user_role", role);
       localStorage.setItem("user_name", user.name);
-      localStorage.setItem("user_email", formData.login); // Also save email/phone
+      localStorage.setItem("user_email", formData.login);
 
       if (rememberMe) {
         localStorage.setItem("remembered_email", formData.login);
+      } else {
+        localStorage.removeItem("remembered_email");
       }
 
       alert(`Welcome back, ${user.name}!`);
       
-      // REDIRECTION LOGIC - Updated to go to dashboard for regular users
-      if (role === 'admin') {
-          router.push("/admin/dashboard");
-      } else if (role === 'owner') {
-          router.push("/owner/dashboard");
+      // REDIRECTION LOGIC - Check returnUrl first
+      if (returnUrl) {
+        // Decode the returnUrl (it might be encoded)
+        const decodedReturnUrl = decodeURIComponent(returnUrl);
+        router.push(decodedReturnUrl);
       } else {
-          // For regular users, go to dashboard page
+        // Fallback to role-based dashboard
+        if (role === 'admin') {
+          router.push("/admin/dashboard");
+        } else if (role === 'owner') {
+          router.push("/owner/dashboard");
+        } else {
           router.push("/dashboard");
+        }
       }
       
     } catch (error: any) {
@@ -59,7 +79,7 @@ export default function Login() {
     }
   };
 
-  // Rest of the component remains the same...
+  // Rest of the component remains exactly the same as original
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-purple-50 to-pink-50">
       {/* Left Side - Login Form */}
@@ -131,13 +151,13 @@ export default function Login() {
                   id="remember"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-blackfocus:ring-pink-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-black focus:ring-pink-500 border-gray-300 rounded"
                 />
                 <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
                   Remember Me
                 </label>
               </div>
-              <Link href="/forgot-password" className="text-sm text-blackhover:text-pink-800 hover:underline">
+              <Link href="/forgot-password" className="text-sm text-black hover:text-pink-800 hover:underline">
                 Forgot Password?
               </Link>
             </div>
@@ -193,15 +213,15 @@ export default function Login() {
           <div className="mt-8 text-center">
             <p className="text-gray-600 text-sm">
               Don't have an account?{" "}
-              <Link href="/register" className="text-blackfont-semibold hover:text-pink-800 hover:underline">
+              <Link href="/register" className="text-black font-semibold hover:text-pink-800 hover:underline">
                 Sign Up Now
               </Link>
             </p>
             <p className="mt-2 text-xs text-gray-500">
               By signing in, you agree to our{" "}
-              <Link href="/terms" className="text-blackhover:underline">Terms</Link>{" "}
+              <Link href="/terms" className="text-black hover:underline">Terms</Link>{" "}
               and{" "}
-              <Link href="/privacy" className="text-blackhover:underline">Privacy Policy</Link>
+              <Link href="/privacy" className="text-black hover:underline">Privacy Policy</Link>
             </p>
           </div>
         </div>
@@ -255,7 +275,7 @@ export default function Login() {
 
           {/* CTA Button */}
           <Link href="/browse-venues">
-            <button className="w-full bg-white text-blackfont-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
+            <button className="w-full bg-white text-black font-semibold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
               Browse Venues
             </button>
           </Link>
