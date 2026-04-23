@@ -207,10 +207,9 @@ export default function RoleBasedLayout({
     { name: 'My Enquiries', href: '/my-enquiries', icon: MessageCircle },
     { name: 'Saved Venues', href: '/my-saved', icon: Heart },
     { name: 'Booking History', href: '/history', icon: FileText },
-    { name: 'Messages', href: '/messages', icon: MessageSquare },
     { name: 'Payments', href: '/payments', icon: CreditCard },
-    { name: 'Profile', href: '/profile', icon: User },
-    { name: 'Help & Support', href: '/support', icon: HelpCircle },
+   
+  
   ];
 
   const getNavLinks = () => {

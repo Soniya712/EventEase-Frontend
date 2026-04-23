@@ -126,7 +126,7 @@ export default function MyBookingsPage() {
   const getStatusBadge = (booking: Booking) => {
     const deadline = getDeadlineInfo(booking);
 
-    if (booking.status === "confirmed" && deadline?.isExpired) {
+    if (booking.status != "confirmed" && deadline?.isExpired) {
       return (
         <span className="px-3 py-1 rounded-full text-xs font-bold uppercase bg-red-100 text-red-800 flex items-center gap-1">
           <XCircle size={12} /> Cancelled (Expired)
