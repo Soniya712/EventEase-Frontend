@@ -5,12 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { 
+import {
   MapPin, Users, Star, Heart, Calendar, DollarSign,
   CheckCircle, Phone, Mail, Share2, ChevronLeft, ChevronRight,
-  Shield, MessageSquare, X, Send, User, FileText
+  Shield, MessageSquare, X, Send, User, FileText, Building2
 } from "lucide-react";
 import { getImageUrl } from "@/lib/imageHelper";
+import { toggleSaveVenue } from "@/lib/savedVenues";
 
 export default function VenueDetailPage() {
   const { id } = useParams();
@@ -19,6 +20,7 @@ export default function VenueDetailPage() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [isSaved, setIsSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
   
   // Inquiry Modal State
   const [showInquiryModal, setShowInquiryModal] = useState(false);
@@ -32,7 +34,6 @@ export default function VenueDetailPage() {
   const [formErrors, setFormErrors] = useState<any>({});
 
   useEffect(() => {
-    // Get user data if available (for pre-filling)
     const name = localStorage.getItem("user_name");
     const userEmail = localStorage.getItem("user_email");
     const userPhone = localStorage.getItem("user_phone");
@@ -49,8 +50,12 @@ export default function VenueDetailPage() {
 
   const fetchVenueDetails = async () => {
     try {
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/venues/${id}`);
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/venues/${id}`, { headers });
       setVenue(res.data);
+      // ✅ Set initial saved status from backend
+      setIsSaved(res.data.saved || false);
     } catch (error) {
       console.error("Error fetching venue details:", error);
     } finally {
@@ -61,6 +66,26 @@ export default function VenueDetailPage() {
   const handleShareVenue = () => {
     navigator.clipboard.writeText(window.location.href);
     alert("Link copied to clipboard!");
+  };
+
+  const handleSaveToggle = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push(`/login?returnUrl=/venues/${id}`);
+      return;
+    }
+
+    if (saving || !venue) return;
+    setSaving(true);
+    try {
+      const newSaved = await toggleSaveVenue(venue.id, isSaved);
+      setIsSaved(newSaved);
+    } catch (error) {
+      console.error("Save toggle failed", error);
+      alert("Failed to save/unsave venue. Please try again.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleInquiryChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -119,6 +144,20 @@ export default function VenueDetailPage() {
     }
   };
 
+  const parseArrayField = (field: any): string[] => {
+    if (!field) return [];
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string') {
+      try {
+        const parsed = JSON.parse(field);
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  };
+
   if (loading) {
     return (
       <>
@@ -143,6 +182,11 @@ export default function VenueDetailPage() {
       </>
     );
   }
+
+  const amenitiesArray = parseArrayField(venue.amenities);
+  const eventTypesArray = parseArrayField(venue.event_types);
+  const hallCost = venue?.hall_cost || 0;
+  const pricePerPlate = venue?.price_per_plate || 0;
 
   return (
     <>
@@ -180,8 +224,15 @@ export default function VenueDetailPage() {
                   <button onClick={handleShareVenue} className="p-3 bg-white/90 hover:bg-white rounded-full shadow-md">
                     <Share2 size={20} className="text-gray-700" />
                   </button>
-                  <button onClick={() => setIsSaved(!isSaved)} className="p-3 bg-white/90 hover:bg-white rounded-full shadow-md">
-                    <Heart size={20} className={isSaved ? "text-pink-600 fill-pink-600" : "text-gray-700"} />
+                  <button 
+                    onClick={handleSaveToggle} 
+                    disabled={saving}
+                    className="p-3 bg-white/90 hover:bg-white rounded-full shadow-md transition-colors"
+                  >
+                    <Heart 
+                      size={20} 
+                      className={isSaved ? "text-pink-600 fill-pink-600" : "text-gray-700"} 
+                    />
                   </button>
                 </div>
               </div>
@@ -211,6 +262,7 @@ export default function VenueDetailPage() {
                 </div>
               </div>
 
+              {/* Stats Cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
                 <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
                   <Users className="text-blue-600 mb-2" size={24} />
@@ -219,18 +271,18 @@ export default function VenueDetailPage() {
                 </div>
                 <div className="p-4 bg-green-50 rounded-2xl border border-green-100">
                   <DollarSign className="text-green-600 mb-2" size={24} />
-                  <p className="text-xs text-green-600 uppercase font-bold">Price</p>
-                  <p className="text-xl font-bold text-green-900">₹{venue.price_per_plate} <span className="text-sm font-normal">/ plate</span></p>
+                  <p className="text-xs text-green-600 uppercase font-bold">Price per Plate</p>
+                  <p className="text-xl font-bold text-green-900">₹{pricePerPlate.toLocaleString()} <span className="text-sm font-normal">/ plate</span></p>
                 </div>
                 <div className="p-4 bg-purple-50 rounded-2xl border border-purple-100">
-                  <Shield className="text-purple-600 mb-2" size={24} />
-                  <p className="text-xs text-purple-600 uppercase font-bold">Status</p>
-                  <p className="text-xl font-bold text-purple-900">Verified</p>
+                  <Building2 className="text-purple-600 mb-2" size={24} />
+                  <p className="text-xs text-purple-600 uppercase font-bold">Hall Cost</p>
+                  <p className="text-xl font-bold text-purple-900">₹{hallCost.toLocaleString()}</p>
                 </div>
                 <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100">
                   <CheckCircle className="text-amber-600 mb-2" size={24} />
                   <p className="text-xs text-amber-600 uppercase font-bold">Approved</p>
-                  <p className="text-xl font-bold text-amber-900">Live</p>
+                  <p className="text-xl font-bold text-amber-900">Verified</p>
                 </div>
               </div>
 
@@ -239,17 +291,35 @@ export default function VenueDetailPage() {
                   <h2 className="text-2xl font-bold text-gray-900 mb-4">About Venue</h2>
                   <p className="text-gray-600 leading-relaxed whitespace-pre-line">{venue.description}</p>
                 </section>
-                <section>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-4">Amenities</h2>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                    {venue.amenities?.map((amenity: string, idx: number) => (
-                      <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl text-gray-700">
-                        <CheckCircle size={18} className="text-green-500 shrink-0" />
-                        <span className="font-medium capitalize">{amenity.replace('_', ' ')}</span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
+                
+                {/* Amenities */}
+                {amenitiesArray.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Amenities</h2>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {amenitiesArray.map((amenity: string, idx: number) => (
+                        <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl text-gray-700">
+                          <CheckCircle size={18} className="text-green-500 shrink-0" />
+                          <span className="font-medium capitalize">{amenity.replace(/_/g, ' ')}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </section>
+                )}
+
+                {/* Event Types */}
+                {eventTypesArray.length > 0 && (
+                  <section>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-4">Perfect For</h2>
+                    <div className="flex flex-wrap gap-2">
+                      {eventTypesArray.map((type: string, idx: number) => (
+                        <span key={idx} className="px-4 py-2 bg-pink-50 text-pink-700 rounded-full text-sm font-medium">
+                          {type}
+                        </span>
+                      ))}
+                    </div>
+                  </section>
+                )}
               </div>
             </div>
           </div>
@@ -294,7 +364,7 @@ export default function VenueDetailPage() {
           </div>
         </div>
 
-        {/* Inquiry Modal (same as before) */}
+        {/* Inquiry Modal */}
         {showInquiryModal && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 overflow-y-auto">
             <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl">

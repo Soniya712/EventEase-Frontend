@@ -16,20 +16,19 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState('');
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [guestError, setGuestError] = useState('');
 
-  // Form State
+  // Form State – guest_count starts empty (no default)
   const [formData, setFormData] = useState({
     event_date: "",
-    guest_count: 0,
+    guest_count: null as number | null,
     event_type: "",
     special_requests: ""
   });
 
-  // ✅ Check authentication on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      // Redirect to login page with return URL
       router.push(`/login?returnUrl=/venues/${id}/book`);
       return;
     }
@@ -51,16 +50,45 @@ export default function BookingPage() {
     }
   };
 
+  // Safely convert to number
+  const toNumber = (val: any): number => {
+    const num = Number(val);
+    return isNaN(num) ? 0 : num;
+  };
+
+  // Total = hall_cost + (guest_count * price_per_plate)
   const calculateTotal = () => {
-    if (!venue || !formData.guest_count) return 0;
-    return formData.guest_count * venue.price_per_plate;
+    if (!venue) return 0;
+    const hallCost = toNumber(venue.hall_cost);
+    const pricePerPlate = toNumber(venue.price_per_plate);
+    const guests = toNumber(formData.guest_count);
+    return hallCost + (pricePerPlate * guests);
+  };
+
+  const handleGuestChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value === '' ? null : parseInt(e.target.value);
+    setFormData({ ...formData, guest_count: value });
+    
+    // Clear error if valid
+    if (value && value >= 50) {
+      setGuestError('');
+    } else if (value && value < 50) {
+      setGuestError('Minimum 50 guests required');
+    } else {
+      setGuestError('');
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const token = localStorage.getItem("token");
     
-    // Double-check token (should exist because we already checked)
+    // Validation
+    if (!formData.guest_count || formData.guest_count < 50) {
+      setGuestError('Minimum 50 guests required');
+      return;
+    }
+    
+    const token = localStorage.getItem("token");
     if (!token) {
       router.push(`/login?returnUrl=/venues/${id}/book`);
       return;
@@ -72,7 +100,7 @@ export default function BookingPage() {
       await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/bookings`, {
         venue_id: id,
         event_date: formData.event_date,
-        guest_count: formData.guest_count,
+        guest_count: toNumber(formData.guest_count),
         event_type: formData.event_type,
         special_requests: formData.special_requests,
         total_amount: finalAmount 
@@ -88,17 +116,18 @@ export default function BookingPage() {
     }
   };
 
-  // Show loading while checking auth
   if (isCheckingAuth) {
-    return (
-      <div className="p-20 text-center animate-pulse font-bold">
-        Checking authentication...
-      </div>
-    );
+    return <div className="p-20 text-center animate-pulse font-bold">Checking authentication...</div>;
   }
 
   if (loading) return <div className="p-20 text-center animate-pulse font-bold">Loading venue details...</div>;
   if (!venue) return <div className="p-20 text-center">Venue not found.</div>;
+
+  const hallCost = toNumber(venue.hall_cost);
+  const pricePerPlate = toNumber(venue.price_per_plate);
+  const guests = toNumber(formData.guest_count);
+  const cateringTotal = pricePerPlate * guests;
+  const finalTotal = hallCost + cateringTotal;
 
   return (
     <RoleBasedLayout userName={userName} userRole="user">
@@ -111,6 +140,7 @@ export default function BookingPage() {
         </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Booking Form */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
               <h1 className="text-3xl font-black text-gray-900 mb-2 tracking-tight">Book Your Event</h1>
@@ -133,18 +163,23 @@ export default function BookingPage() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Guests</label>
+                    <label className="block text-xs font-black text-gray-400 uppercase tracking-widest mb-3">Guests (min. 50)</label>
                     <div className="relative">
                       <Users className="absolute left-4 top-3.5 text-gray-400" size={18} />
                       <input 
                         type="number" 
                         required
+                        min="50"
                         max={venue.capacity}
-                        placeholder={`Max ${venue.capacity}`}
+                        placeholder={`Min 50, Max ${venue.capacity}`}
                         className="w-full pl-12 p-3.5 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-pink-500 outline-none font-bold text-gray-700"
-                        onChange={(e) => setFormData({...formData, guest_count: parseInt(e.target.value)})}
+                        value={formData.guest_count ?? ''}
+                        onChange={handleGuestChange}
                       />
                     </div>
+                    {guestError && (
+                      <p className="text-red-500 text-xs mt-1">{guestError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -159,7 +194,7 @@ export default function BookingPage() {
                     >
                       <option value="">Select Category</option>
                       {venue.event_types?.map((type: string) => (
-                        <option key={type} value={type}>{type.replace('_', ' ').toUpperCase()}</option>
+                        <option key={type} value={type}>{type.replace(/_/g, ' ').toUpperCase()}</option>
                       ))}
                     </select>
                   </div>
@@ -185,7 +220,7 @@ export default function BookingPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
+          {/* Cost Breakdown Sidebar */}
           <div className="space-y-6">
             <div className="bg-white p-8 rounded-[2.5rem] shadow-xl border border-gray-100">
               <h2 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-tighter">Summary</h2>
@@ -202,28 +237,36 @@ export default function BookingPage() {
 
               <div className="space-y-5 border-t pt-8">
                 <div className="flex justify-between items-center">
-                  <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Price / Plate</span>
-                  <span className="font-bold text-gray-900">₹{venue.price_per_plate}</span>
+                  <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Hall Cost (fixed)</span>
+                  <span className="font-bold text-gray-900">₹{hallCost.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Price per Plate</span>
+                  <span className="font-bold text-gray-900">₹{pricePerPlate.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="text-gray-400 text-xs font-bold uppercase tracking-widest">Guests</span>
-                  <span className="font-bold text-gray-900">{formData.guest_count || 0}</span>
+                  <span className="font-bold text-gray-900">{guests}</span>
+                </div>
+                <div className="flex justify-between items-center text-sm pt-2 border-t border-gray-100">
+                  <span className="text-gray-500">Catering Total:</span>
+                  <span className="font-semibold">₹{cateringTotal.toLocaleString()}</span>
                 </div>
                 
-                <div className="pt-6 mt-4 border-t border-gray-50 flex flex-col gap-1">
-                    <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">Estimated Total</p>
-                    <p className="text-4xl font-black text-pink-600">
-                      ₹{calculateTotal().toLocaleString()}
-                    </p>
+                <div className="pt-4 mt-2 border-t border-gray-50 flex flex-col gap-1">
+                  <p className="text-[10px] text-gray-400 font-black uppercase tracking-[0.2em]">Estimated Total (incl. hall fee)</p>
+                  <p className="text-4xl font-black text-pink-600">
+                    ₹{finalTotal.toLocaleString()}
+                  </p>
                 </div>
               </div>
             </div>
 
             <div className="bg-blue-50 p-6 rounded-3xl border border-blue-100 flex gap-4">
-                <Info className="shrink-0 text-blue-600" size={20} />
-                <p className="text-xs font-bold text-blue-800 leading-relaxed">
-                  Notice: This is a booking request. The owner will review availability and contact you.
-                </p>
+              <Info className="shrink-0 text-blue-600" size={20} />
+              <p className="text-xs font-bold text-blue-800 leading-relaxed">
+                Notice: This is a booking request. The owner will review availability and contact you.
+              </p>
             </div>
           </div>
         </div>

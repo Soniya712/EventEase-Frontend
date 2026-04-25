@@ -36,7 +36,7 @@ interface Inquiry {
   contact: string;
   email: string;
   message: string;
-  status: 'pending' | 'replied' | 'completed';
+  status: 'pending' | 'replied';  // removed 'completed'
   admin_reply: string | null;
   replied_at: string | null;
   created_at: string;
@@ -54,7 +54,7 @@ interface Stats {
   total: number;
   pending: number;
   replied: number;
-  completed: number;
+  // removed completed
 }
 
 export default function MyEnquiriesPage() {
@@ -67,7 +67,6 @@ export default function MyEnquiriesPage() {
     total: 0,
     pending: 0,
     replied: 0,
-    completed: 0
   });
   
   // View Modal State
@@ -147,12 +146,11 @@ export default function MyEnquiriesPage() {
         
         setInquiries(inquiriesData);
         
-        // Calculate stats
+        // Calculate stats (excluding completed)
         setStats({
           total: inquiriesData.length,
           pending: inquiriesData.filter(i => i.status === 'pending').length,
           replied: inquiriesData.filter(i => i.status === 'replied').length,
-          completed: inquiriesData.filter(i => i.status === 'completed').length
         });
       }
     } catch (error) {
@@ -260,12 +258,6 @@ export default function MyEnquiriesPage() {
             <Reply size={12} /> Replied
           </span>
         );
-      case 'completed':
-        return (
-          <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">
-            <CheckCircle size={12} /> Completed
-          </span>
-        );
       default:
         return <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">{status}</span>;
     }
@@ -321,8 +313,8 @@ export default function MyEnquiriesPage() {
         </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Stats Cards - Removed Completed */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex justify-between items-start">
             <div>
@@ -359,18 +351,6 @@ export default function MyEnquiriesPage() {
             </div>
           </div>
         </div>
-
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">Completed</p>
-              <p className="text-3xl font-black mt-2 text-green-600">{stats.completed}</p>
-            </div>
-            <div className="p-3 bg-green-50 rounded-xl text-green-600">
-              <CheckCircle size={24} />
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Filter Bar */}
@@ -395,7 +375,7 @@ export default function MyEnquiriesPage() {
             <option value="all">All Status</option>
             <option value="pending">Awaiting Response</option>
             <option value="replied">Replied</option>
-            <option value="completed">Completed</option>
+            {/* Removed completed option */}
           </select>
         </div>
       </div>
@@ -442,7 +422,7 @@ export default function MyEnquiriesPage() {
                         <Reply size={10} /> Replied: {inquiry.admin_reply.substring(0, 50)}...
                       </p>
                     )}
-                  </td>
+                   </td>
                   <td className="px-6 py-4">{getStatusBadge(inquiry.status)}</td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-500">
@@ -453,7 +433,7 @@ export default function MyEnquiriesPage() {
                         Replied: {new Date(inquiry.replied_at).toLocaleDateString()}
                       </div>
                     )}
-                  </td>
+                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center justify-center">
                       <button
@@ -467,7 +447,7 @@ export default function MyEnquiriesPage() {
                         <Eye size={18} />
                       </button>
                     </div>
-                  </td>
+                   </td>
                 </tr>
               ))
             )}
@@ -576,11 +556,9 @@ export default function MyEnquiriesPage() {
               {/* Venue Info */}
               <div className="p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl">
                 <div className="flex items-center gap-4">
-                
-
-<img
+                  <img
                     src={`${process.env.NEXT_PUBLIC_BACKEND_FILE_URL}/${viewingInquiry.venue.primary_image || "placeholder.png"}`}
-                    className="w-full h-full object-cover"
+                    className="w-16 h-16 rounded-xl object-cover"
                     alt="Venue"
                   />
                   <div>
@@ -638,7 +616,7 @@ export default function MyEnquiriesPage() {
                 </div>
               )}
               
-              {/* Actions */}
+              {/* Actions - Removed "Mark as Completed" button */}
               <div className="flex gap-3 pt-4">
                 <Link
                   href={`/venues/${viewingInquiry.venue.id}`}
@@ -646,17 +624,7 @@ export default function MyEnquiriesPage() {
                 >
                   View Venue
                 </Link>
-                {viewingInquiry.status === 'replied' &&  (
-                  <button
-                    onClick={() => {
-                      // You can implement mark as completed functionality here
-                      alert('You can mark this inquiry as completed if your issue is resolved.');
-                    }}
-                    className="flex-1 py-3 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all flex items-center justify-center gap-2"
-                  >
-                    <Check size={16} /> Mark as Completed
-                  </button>
-                )}
+                {/* No "Mark as Completed" button anymore */}
               </div>
             </div>
           </div>

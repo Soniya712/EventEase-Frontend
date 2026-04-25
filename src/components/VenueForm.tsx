@@ -1,189 +1,143 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  Wifi, Car, Wind, Zap, Utensils, Music, Video, Wine,
-  X, ChevronRight, Building, Home
-} from "lucide-react";
-
-/* ---------------- TYPES ---------------- */
-
-interface VenueFormData {
-  name: string;
-  city: string;
-  address: string;
-  contact_phone: string;
-  website_url: string;
-  capacity: string;
-  price_per_plate: string;
-  description: string;
-  start_time: string;
-  end_time: string;
-  amenities: string[];
-  event_types: string[];
-  email: string;
-  state: string;
-  zip_code: string;
-  images: string[]; // existing image paths (URLs)
-}
+import axios from "axios";
+import { X, Upload, Plus, Trash2 } from "lucide-react";
 
 interface VenueFormProps {
   initialData?: any;
   isEditMode?: boolean;
 }
 
-/* ---------------- COMPONENT ---------------- */
+// Predefined amenities list
+const PREDEFINED_AMENITIES = [
+  "wifi",
+  "parking",
+  "sound_system",
+  "ac",
+  "catering",
+  "decoration",
+  "stage",
+  "changing_room",
+  "dj",
+  "bar",
+  "smoking_area",
+  "valet_parking",
+  "wheelchair_access",
+  "security",
+];
 
 export default function VenueForm({ initialData, isEditMode = false }: VenueFormProps) {
   const router = useRouter();
-
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState(1);
 
-  const [filesToUpload, setFilesToUpload] = useState<File[]>([]);
-  const [previewImages, setPreviewImages] = useState<string[]>([]);
-
-  const [formData, setFormData] = useState<VenueFormData>({
+  // Form fields
+  const [formData, setFormData] = useState({
     name: "",
     city: "",
+    state: "",
     address: "",
     contact_phone: "",
-    website_url: "",
+    email: "",
     capacity: "",
     price_per_plate: "",
+    hall_cost: "",
     description: "",
-    start_time: "09:00",
-    end_time: "23:00",
-    amenities: [],
-    event_types: [],
-    email: "",
-    state: "",
-    zip_code: "",
-    images: [],
+    amenities: [] as string[],
+    event_types: [] as string[],
   });
 
-  /* ---------------- OPTIONS ---------------- */
+  // Images
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [existingImages, setExistingImages] = useState<string[]>([]);
 
-  const amenityOptions = [
-    { id: "wifi", label: "WiFi", icon: <Wifi size={20} /> },
-    { id: "parking", label: "Parking", icon: <Car size={20} /> },
-    { id: "ac", label: "Air Conditioning", icon: <Wind size={20} /> },
-    { id: "generator", label: "Generator", icon: <Zap size={20} /> },
-    { id: "catering", label: "Catering", icon: <Utensils size={20} /> },
-    { id: "sound_system", label: "Sound System", icon: <Music size={20} /> },
-    { id: "projector", label: "Projector", icon: <Video size={20} /> },
-    { id: "bar", label: "Bar Service", icon: <Wine size={20} /> },
-  ];
+  // Cost breakdown estimator
+  const [estimatedGuests, setEstimatedGuests] = useState(100);
 
-  const eventTypeOptions = [
-    "Wedding", "Corporate", "Birthday", "Conference",
-    "Party", "Seminar", "Exhibition", "Workshop"
-  ];
+  // Temporary inputs for arrays
+  const [newAmenity, setNewAmenity] = useState("");
+  const [newEventType, setNewEventType] = useState("");
 
-  /* ---------------- LOAD EDIT DATA ---------------- */
-
+  // Load data when editing
   useEffect(() => {
-    if (initialData) {
+    if (initialData && isEditMode) {
       setFormData({
         name: initialData.name || "",
         city: initialData.city || "",
+        state: initialData.state || "",
         address: initialData.address || "",
         contact_phone: initialData.contact_phone || "",
-        website_url: initialData.website_url || "",
-        capacity: String(initialData.capacity || ""),
-        price_per_plate: String(initialData.price_per_plate || ""),
+        email: initialData.email || "",
+        capacity: initialData.capacity?.toString() || "",
+        price_per_plate: initialData.price_per_plate?.toString() || "",
+        hall_cost: initialData.hall_cost?.toString() || "",
         description: initialData.description || "",
-        start_time: initialData.start_time || "09:00",
-        end_time: initialData.end_time || "23:00",
         amenities: initialData.amenities || [],
         event_types: initialData.event_types || [],
-        email: initialData.email || "",
-        state: initialData.state || "",
-        zip_code: initialData.zip_code || "",
-        images: initialData.images || [],
       });
-
-      setPreviewImages(initialData.images || []);
+      setExistingImages(initialData.images || []);
     }
-  }, [initialData]);
+  }, [initialData, isEditMode]);
 
-  /* ---------------- HANDLERS ---------------- */
-
-  const handleChange = (e: any) => {
+  // Toggle predefined amenity
+  const toggleAmenity = (amenity: string) => {
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      amenities: prev.amenities.includes(amenity)
+        ? prev.amenities.filter(a => a !== amenity)
+        : [...prev.amenities, amenity]
     }));
   };
 
-  const handleAmenityChange = (id: string) => {
-    setFormData(prev => ({
-      ...prev,
-      amenities: prev.amenities.includes(id)
-        ? prev.amenities.filter(a => a !== id)
-        : [...prev.amenities, id]
-    }));
+  // Add custom amenity
+  const addCustomAmenity = () => {
+    const trimmed = newAmenity.trim().toLowerCase().replace(/\s+/g, '_');
+    if (trimmed && !formData.amenities.includes(trimmed)) {
+      setFormData({ ...formData, amenities: [...formData.amenities, trimmed] });
+      setNewAmenity("");
+    }
+  };
+  const removeAmenity = (item: string) => {
+    setFormData({ ...formData, amenities: formData.amenities.filter((a) => a !== item) });
   };
 
-  const toggleEventType = (type: string) => {
-    setFormData(prev => ({
-      ...prev,
-      event_types: prev.event_types.includes(type)
-        ? prev.event_types.filter(t => t !== type)
-        : [...prev.event_types, type]
-    }));
+  // Event types (similar to before)
+  const addEventType = () => {
+    const trimmed = newEventType.trim().replace(/\s+/g, ' ');
+    if (trimmed && !formData.event_types.includes(trimmed)) {
+      setFormData({ ...formData, event_types: [...formData.event_types, trimmed] });
+      setNewEventType("");
+    }
+  };
+  const removeEventType = (item: string) => {
+    setFormData({ ...formData, event_types: formData.event_types.filter((e) => e !== item) });
   };
 
-  /* ---------------- IMAGE LOGIC ---------------- */
-
-  const processFiles = (files: FileList | null) => {
-    if (!files) return;
-
-    const newFiles = Array.from(files);
-    setFilesToUpload(prev => [...prev, ...newFiles]);
-
-    const previews = newFiles.map(file => URL.createObjectURL(file));
-    setPreviewImages(prev => [...prev, ...previews]);
+  // Image handlers
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFiles([...imageFiles, ...Array.from(e.target.files)]);
+    }
   };
-
-  const handleImageUpload = (e: any) => processFiles(e.target.files);
-  const handleDrop = (e: any) => { e.preventDefault(); processFiles(e.dataTransfer.files); };
-  const handleDragOver = (e: any) => e.preventDefault();
-
-  const removeImage = (index: number) => {
-    const existingCount = formData.images.length;
-
-    if (index < existingCount) {
-      setFormData(prev => ({
-        ...prev,
-        images: prev.images.filter((_, i) => i !== index)
-      }));
+  const removeImage = (index: number, isExisting: boolean, existingIndex?: number) => {
+    if (isExisting && existingIndex !== undefined) {
+      setExistingImages(existingImages.filter((_, i) => i !== existingIndex));
     } else {
-      const fileIndex = index - existingCount;
-      setFilesToUpload(prev => prev.filter((_, i) => i !== fileIndex));
+      setImageFiles(imageFiles.filter((_, i) => i !== index));
     }
-
-    setPreviewImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  /* ---------------- SUBMIT ---------------- */
-
-  const handleSubmit = async (e: any) => {
+  // Submit handler (using your working pattern)
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (step < 3) {
-      setStep(step + 1);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-
     setLoading(true);
-    const token = localStorage.getItem("token");
 
     try {
+      const token = localStorage.getItem("token");
       const data = new FormData();
 
+      // Append all fields
       Object.entries(formData).forEach(([key, value]) => {
         if (Array.isArray(value)) {
           data.append(key, JSON.stringify(value));
@@ -192,23 +146,24 @@ export default function VenueForm({ initialData, isEditMode = false }: VenueForm
         }
       });
 
-      filesToUpload.forEach(file => {
+      imageFiles.forEach((file) => {
         data.append("new_images[]", file);
       });
+      if (existingImages.length) {
+        data.append("images", JSON.stringify(existingImages));
+      }
+
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
       if (isEditMode) {
         data.append("_method", "PUT");
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/owner/venues/${initialData.id}`,
-          data,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await axios.post(`${apiUrl}/owner/venues/${initialData.id}`, data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       } else {
-        await axios.post(
-          `${process.env.NEXT_PUBLIC_API_URL}/owner/venues`,
-          data,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
+        await axios.post(`${apiUrl}/owner/venues`, data, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
       }
 
       router.push("/owner/venues");
@@ -220,128 +175,312 @@ export default function VenueForm({ initialData, isEditMode = false }: VenueForm
     }
   };
 
-  const handlePrevStep = () => {
-    if (step > 1) setStep(step - 1);
-  };
-
-  /* ---------------- UI ---------------- */
+  // Cost breakdown calculations
+  const hallCost = Number(formData.hall_cost) || 0;
+  const pricePerPlate = Number(formData.price_per_plate) || 0;
+  const cateringTotal = pricePerPlate * estimatedGuests;
+  const totalEstimate = hallCost + cateringTotal;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      {/* Breadcrumb */}
-      <div className="border-b bg-white">
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center gap-2 text-sm">
-          <button onClick={() => router.push("/owner/dashboard")} className="flex items-center gap-1">
-            <Home size={14}/> Dashboard
-          </button>
-          <ChevronRight size={14}/>
-          <button onClick={() => router.push("/owner/venues")} className="flex items-center gap-1">
-            <Building size={14}/> Venues
-          </button>
-          <ChevronRight size={14}/>
-          <span>{isEditMode ? "Edit Venue" : "Add Venue"}</span>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Basic Information */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Venue Name *</label>
+          <input
+            type="text"
+            required
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">City *</label>
+          <input
+            type="text"
+            required
+            value={formData.city}
+            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+          <input
+            type="text"
+            value={formData.state}
+            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+          <input
+            type="text"
+            value={formData.address}
+            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Contact Phone *</label>
+          <input
+            type="tel"
+            required
+            value={formData.contact_phone}
+            onChange={(e) => setFormData({ ...formData, contact_phone: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <input
+            type="email"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Capacity (persons)</label>
+          <input
+            type="number"
+            min="0"
+            value={formData.capacity}
+            onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
+            className="w-full rounded-md border border-gray-300 px-3 py-2"
+          />
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="bg-gradient-to-r from-gray-900 to-blue-900 rounded-2xl p-8 mb-8 text-white">
-          <h1 className="text-3xl font-bold">{isEditMode ? "Update Venue" : "Create Venue"}</h1>
-          <p className="text-blue-200 mt-2">Step {step} of 3</p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-
-          {/* STEP 1 */}
-          {step === 1 && (
-            <div className="bg-white rounded-2xl p-6 shadow">
-              <h2 className="text-xl font-bold mb-4">Venue Details</h2>
-
-              <input name="name" value={formData.name} onChange={handleChange}
-                placeholder="Venue Name" className="w-full p-3 border rounded-xl mb-4" required />
-
-              <textarea name="description" value={formData.description} onChange={handleChange}
-                placeholder="Description" rows={4} className="w-full p-3 border rounded-xl mb-4" required />
-
-              <div className="grid grid-cols-2 gap-4">
-                <input name="address" value={formData.address} onChange={handleChange} placeholder="Address" className="p-3 border rounded-xl" required />
-                <input name="city" value={formData.city} onChange={handleChange} placeholder="City" className="p-3 border rounded-xl" required />
-                <input name="contact_phone" value={formData.contact_phone} onChange={handleChange} placeholder="Contact Phone" className="p-3 border rounded-xl" required />
-                <input name="email" type="email" value={formData.email} onChange={handleChange} placeholder="Email" className="p-3 border rounded-xl" required />
-                <input name="capacity" type="number" value={formData.capacity} onChange={handleChange} placeholder="Capacity" className="p-3 border rounded-xl" required />
-                <input name="price_per_plate" type="number" value={formData.price_per_plate} onChange={handleChange} placeholder="Price per plate" className="p-3 border rounded-xl" required />
-              </div>
+      {/* Pricing & Cost Breakdown */}
+      <div className="border-t pt-6">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Pricing & Cost Breakdown</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Price per Plate (NPR)</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">NPR</span>
+              <input
+                type="number"
+                min="0"
+                step="100"
+                value={formData.price_per_plate}
+                onChange={(e) => setFormData({ ...formData, price_per_plate: e.target.value })}
+                className="pl-12 w-full rounded-md border border-gray-300 px-3 py-2"
+                placeholder="e.g., 1200"
+              />
             </div>
-          )}
-
-          {/* STEP 2 */}
-          {step === 2 && (
-            <div className="bg-white rounded-2xl p-6 shadow">
-              <h2 className="text-xl font-bold mb-4">Amenities</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {amenityOptions.map(opt => (
-                  <button type="button" key={opt.id}
-                    onClick={() => handleAmenityChange(opt.id)}
-                    className={`p-4 border rounded-xl ${formData.amenities.includes(opt.id) ? "bg-blue-600 text-white" : "bg-gray-50"}`}>
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-
-              <h2 className="text-xl font-bold mt-6 mb-4">Event Types</h2>
-              <div className="flex flex-wrap gap-2">
-                {eventTypeOptions.map(type => (
-                  <button type="button" key={type}
-                    onClick={() => toggleEventType(type)}
-                    className={`px-4 py-2 rounded-full border ${formData.event_types.includes(type) ? "bg-blue-600 text-white" : "bg-gray-50"}`}>
-                    {type}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* STEP 3 */}
-          {step === 3 && (
-            <div className="bg-white rounded-2xl p-6 shadow">
-              <h2 className="text-xl font-bold mb-4">Upload Images</h2>
-
-              <div onDrop={handleDrop} onDragOver={handleDragOver}
-                className="border-2 border-dashed p-8 text-center rounded-xl">
-                <input type="file" multiple onChange={handleImageUpload} id="fileInput" className="hidden" />
-                <label htmlFor="fileInput" className="cursor-pointer text-blue-600 font-bold">
-                  Click or drag images here
-                </label>
-              </div>
-
-              <div className="grid grid-cols-4 gap-4 mt-6">
-                {previewImages.map((img, i) => (
-                  <div key={i} className="relative">
-                    <img src={img} className="h-32 w-full object-cover rounded-xl" />
-                    <button type="button" onClick={() => removeImage(i)}
-                      className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1">
-                      <X size={14}/>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* FOOTER */}
-          <div className="flex justify-between bg-white p-6 rounded-2xl shadow">
-            <button type="button" onClick={handlePrevStep}
-              className={`px-6 py-3 border rounded-xl ${step === 1 ? "invisible" : ""}`}>
-              Previous
-            </button>
-
-            <button type="submit" disabled={loading}
-              className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold">
-              {loading ? "Saving..." : step < 3 ? "Next" : isEditMode ? "Update Venue" : "Publish Venue"}
-            </button>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Venue Hall Cost (fixed rental fee)</label>
+            <div className="relative">
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-500">NPR</span>
+              <input
+                type="number"
+                min="0"
+                step="1000"
+                value={formData.hall_cost}
+                onChange={(e) => setFormData({ ...formData, hall_cost: e.target.value })}
+                className="pl-12 w-full rounded-md border border-gray-300 px-3 py-2"
+                placeholder="e.g., 50000"
+              />
+            </div>
+          </div>
+        </div>
 
-        </form>
+        {/* Cost Breakdown Estimator */}
+        <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <h4 className="font-medium text-gray-800 mb-2">📊 Cost Breakdown Estimator</h4>
+          <div className="mb-3">
+            <label className="block text-sm text-gray-600 mb-1">Number of Guests (estimate)</label>
+            <input
+              type="number"
+              min="1"
+              value={estimatedGuests}
+              onChange={(e) => setEstimatedGuests(Number(e.target.value))}
+              className="w-40 rounded-md border border-gray-300 px-3 py-1"
+            />
+          </div>
+          <div className="space-y-1 text-sm">
+            <div className="flex justify-between">
+              <span>Venue Hall Cost:</span>
+              <span className="font-medium">NPR {hallCost.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Price per Plate:</span>
+              <span className="font-medium">NPR {pricePerPlate.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between border-t pt-1 mt-1">
+              <span>Catering Total ({estimatedGuests} guests):</span>
+              <span>NPR {cateringTotal.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between font-bold text-base pt-1">
+              <span>Total Estimated Cost:</span>
+              <span className="text-blue-700">NPR {totalEstimate.toLocaleString()}</span>
+            </div>
+          </div>
+          <p className="text-xs text-gray-500 mt-2">
+            *This is an estimate. Final cost depends on actual attendance and additional services.
+          </p>
+        </div>
       </div>
-    </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea
+          rows={4}
+          value={formData.description}
+          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          className="w-full rounded-md border border-gray-300 px-3 py-2"
+        />
+      </div>
+
+      {/* Amenities - Updated with Predefined Chips */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Amenities</label>
+        
+        {/* Predefined amenities chips */}
+        <div className="mb-3">
+          <p className="text-xs text-gray-500 mb-2">Common amenities (click to toggle):</p>
+          <div className="flex flex-wrap gap-2">
+            {PREDEFINED_AMENITIES.map((amenity) => (
+              <button
+                key={amenity}
+                type="button"
+                onClick={() => toggleAmenity(amenity)}
+                className={`px-3 py-1 rounded-full text-sm capitalize transition-all ${
+                  formData.amenities.includes(amenity)
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {amenity.replace(/_/g, ' ')}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom amenity input */}
+        <div className="flex gap-2 mb-2">
+          <input
+            type="text"
+            value={newAmenity}
+            onChange={(e) => setNewAmenity(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addCustomAmenity())}
+            className="flex-1 rounded-md border border-gray-300 px-3 py-1"
+            placeholder="Add custom amenity (e.g., outdoor_space)"
+          />
+          <button type="button" onClick={addCustomAmenity} className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">
+            <Plus size={18} />
+          </button>
+        </div>
+
+        {/* Selected amenities display */}
+        <div className="flex flex-wrap gap-2 mt-2">
+          {formData.amenities.map((item) => (
+            <span key={item} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-sm flex items-center">
+              {item.replace(/_/g, ' ')}
+              <button type="button" onClick={() => removeAmenity(item)} className="ml-1 text-blue-600 hover:text-blue-800">
+                <X size={14} />
+              </button>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Event Types */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Event Types</label>
+        <div className="flex flex-wrap gap-2 mb-2">
+          {formData.event_types.map((item) => (
+            <span key={item} className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-sm flex items-center">
+              {item}
+              <button type="button" onClick={() => removeEventType(item)} className="ml-1 text-green-600 hover:text-green-800">
+                <X size={14} />
+              </button>
+            </span>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <input
+            type="text"
+            value={newEventType}
+            onChange={(e) => setNewEventType(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addEventType())}
+            className="flex-1 rounded-md border border-gray-300 px-3 py-1"
+            placeholder="e.g., Wedding, Birthday, Corporate Event"
+          />
+          <button type="button" onClick={addEventType} className="px-3 py-1 bg-gray-200 rounded-md hover:bg-gray-300">
+            <Plus size={18} />
+          </button>
+        </div>
+      </div>
+
+      {/* Images */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Images</label>
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageChange}
+            className="hidden"
+            id="imageUpload"
+          />
+          <label htmlFor="imageUpload" className="cursor-pointer inline-flex items-center gap-2 text-blue-600 hover:text-blue-800">
+            <Upload size={20} /> Upload Images
+          </label>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+          {existingImages.map((img, idx) => (
+            <div key={idx} className="relative group">
+              <img src={img} alt="Venue" className="w-full h-32 object-cover rounded-lg" />
+              <button
+                type="button"
+                onClick={() => removeImage(idx, true, idx)}
+                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))}
+          {imageFiles.map((file, idx) => (
+            <div key={idx} className="relative group">
+              <img src={URL.createObjectURL(file)} alt="Preview" className="w-full h-32 object-cover rounded-lg" />
+              <button
+                type="button"
+                onClick={() => removeImage(idx, false)}
+                className="absolute top-1 right-1 bg-red-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
+              >
+                <Trash2 size={14} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Submit */}
+      <div className="flex justify-end gap-3 pt-4 border-t">
+        <button
+          type="button"
+          onClick={() => router.back()}
+          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50"
+        >
+          {loading ? "Saving..." : isEditMode ? "Update Venue" : "Create Venue"}
+        </button>
+      </div>
+    </form>
   );
 }

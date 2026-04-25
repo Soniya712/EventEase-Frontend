@@ -16,8 +16,6 @@ import {
   Reply,
   Search,
   Filter,
-  Eye,
-  Calendar,
   ChevronDown,
   ChevronUp,
   Send,
@@ -38,7 +36,7 @@ interface Inquiry {
   contact: string;
   email: string;
   message: string;
-  status: 'pending' | 'replied' | 'completed';
+  status: 'pending' | 'replied';   // removed 'completed'
   admin_reply: string | null;
   replied_at: string | null;
   created_at: string;
@@ -60,7 +58,7 @@ interface Stats {
   total: number;
   pending: number;
   replied: number;
-  completed: number;
+  // removed completed
 }
 
 export default function OwnerEnquiriesPage() {
@@ -75,7 +73,6 @@ export default function OwnerEnquiriesPage() {
     total: 0,
     pending: 0,
     replied: 0,
-    completed: 0
   });
   
   // Reply Modal State
@@ -84,10 +81,6 @@ export default function OwnerEnquiriesPage() {
   const [replyMessage, setReplyMessage] = useState('');
   const [replying, setReplying] = useState(false);
   const [replyError, setReplyError] = useState('');
-  
-  // View Modal State
-  const [showViewModal, setShowViewModal] = useState(false);
-  const [viewingInquiry, setViewingInquiry] = useState<Inquiry | null>(null);
   
   // Expanded rows for mobile view
   const [expandedRow, setExpandedRow] = useState<number | null>(null);
@@ -116,47 +109,41 @@ export default function OwnerEnquiriesPage() {
     try {
       const token = localStorage.getItem("token");
       
-      // Use the optimized endpoint for owner's inquiries
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/owner/inquiries`,
         {
           headers: { Authorization: `Bearer ${token}` },
-          params: { per_page: 100 } // Get up to 100 records
+          params: { per_page: 100 }
         }
       );
       
       if (response.data.success) {
         let inquiriesData: Inquiry[] = [];
         
-        // Handle different response structures
         if (response.data.data && response.data.data.data) {
-          // Paginated response
           inquiriesData = response.data.data.data;
         } else if (Array.isArray(response.data.data)) {
-          // Direct array response
           inquiriesData = response.data.data;
         } else if (Array.isArray(response.data)) {
-          // Direct response without wrapper
           inquiriesData = response.data;
         }
         
+        // Ensure no 'completed' status (treat as replied if needed)
+        inquiriesData = inquiriesData.map(inq => {
+          if (inq.status === 'completed') return { ...inq, status: 'replied' };
+          return inq;
+        });
+        
         setInquiries(inquiriesData);
         
-        // Calculate stats
         setStats({
           total: inquiriesData.length,
           pending: inquiriesData.filter(i => i.status === 'pending').length,
           replied: inquiriesData.filter(i => i.status === 'replied').length,
-          completed: inquiriesData.filter(i => i.status === 'completed').length
         });
-      } else {
-        console.error("Failed to fetch inquiries:", response.data.message);
       }
     } catch (error: any) {
       console.error("Error fetching inquiries:", error);
-      if (error.response?.data?.message) {
-        alert(`Error: ${error.response.data.message}`);
-      }
     } finally {
       setLoading(false);
     }
@@ -184,7 +171,6 @@ export default function OwnerEnquiriesPage() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       
-      // Update local state
       setInquiries(inquiries.map(inquiry => 
         inquiry.id === selectedInquiry.id 
           ? { 
@@ -196,7 +182,6 @@ export default function OwnerEnquiriesPage() {
           : inquiry
       ));
       
-      // Update stats
       setStats(prev => ({
         ...prev,
         pending: prev.pending - 1,
@@ -216,50 +201,12 @@ export default function OwnerEnquiriesPage() {
     }
   };
 
-  const handleStatusUpdate = async (inquiryId: number, newStatus: 'pending' | 'replied' | 'completed') => {
-    try {
-      const token = localStorage.getItem("token");
-      await axios.put(
-        `${process.env.NEXT_PUBLIC_API_URL}/inquiries/${inquiryId}/status`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      
-      // Update local state
-      setInquiries(inquiries.map(inquiry => 
-        inquiry.id === inquiryId ? { ...inquiry, status: newStatus } : inquiry
-      ));
-      
-      // Update stats
-      const oldStatus = inquiries.find(i => i.id === inquiryId)?.status;
-      setStats(prev => {
-        const newStats = { ...prev };
-        if (oldStatus === 'pending') newStats.pending--;
-        if (oldStatus === 'replied') newStats.replied--;
-        if (oldStatus === 'completed') newStats.completed--;
-        
-        if (newStatus === 'pending') newStats.pending++;
-        if (newStatus === 'replied') newStats.replied++;
-        if (newStatus === 'completed') newStats.completed++;
-        
-        return newStats;
-      });
-      
-      alert('Status updated successfully!');
-    } catch (error) {
-      console.error("Error updating status:", error);
-      alert('Failed to update status. Please try again.');
-    }
-  };
-
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'pending':
         return <span className="inline-flex items-center gap-1 px-3 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full"><Clock size={12} /> Pending</span>;
       case 'replied':
         return <span className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full"><Reply size={12} /> Replied</span>;
-      case 'completed':
-        return <span className="inline-flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full"><CheckCircle size={12} /> Completed</span>;
       default:
         return <span className="px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">{status}</span>;
     }
@@ -315,8 +262,8 @@ export default function OwnerEnquiriesPage() {
         </button>
       </div>
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      {/* Stats Cards - 3 cards only (no completed) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <div className="flex justify-between items-start">
             <div>
@@ -353,18 +300,6 @@ export default function OwnerEnquiriesPage() {
             </div>
           </div>
         </div>
-
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
-          <div className="flex justify-between items-start">
-            <div>
-              <p className="text-sm text-gray-500 font-bold uppercase tracking-wider">Completed</p>
-              <p className="text-3xl font-black mt-2 text-green-600">{stats.completed}</p>
-            </div>
-            <div className="p-3 bg-green-50 rounded-xl text-green-600">
-              <CheckCircle size={24} />
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Filter Bar */}
@@ -389,7 +324,7 @@ export default function OwnerEnquiriesPage() {
             <option value="all">All Status</option>
             <option value="pending">Pending</option>
             <option value="replied">Replied</option>
-            <option value="completed">Completed</option>
+            {/* Removed Completed option */}
           </select>
           
           <select
@@ -415,7 +350,7 @@ export default function OwnerEnquiriesPage() {
               <th className="px-6 py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Venue</th>
               <th className="px-6 py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Status</th>
               <th className="px-6 py-5 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</th>
-              <th className="px-6 py-5 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Actions</th>
+              <th className="px-6 py-5 text-xs font-bold text-gray-400 uppercase tracking-widest text-center">Action</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50">
@@ -457,18 +392,9 @@ export default function OwnerEnquiriesPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center justify-center gap-2">
-                      <button
-                        onClick={() => {
-                          setViewingInquiry(inquiry);
-                          setShowViewModal(true);
-                        }}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all"
-                        title="View Details"
-                      >
-                        <Eye size={18} />
-                      </button>
-                      {inquiry.status !== 'completed' && (
+                    <div className="flex items-center justify-center">
+                      {/* Removed Eye icon (View button) */}
+                      {inquiry.status !== 'replied' && (
                         <button
                           onClick={() => {
                             setSelectedInquiry(inquiry);
@@ -499,7 +425,6 @@ export default function OwnerEnquiriesPage() {
         ) : (
           filteredInquiries.map((inquiry) => (
             <div key={inquiry.id} className="bg-white rounded-2xl border border-gray-100 p-4 shadow-sm">
-              {/* ... mobile card content (same as before) ... */}
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <p className="font-bold text-gray-900">{inquiry.full_name}</p>
@@ -543,29 +468,19 @@ export default function OwnerEnquiriesPage() {
                 </div>
               )}
               
-              <div className="flex gap-2">
+              {/* Only reply button (no view button) */}
+              {inquiry.status !== 'replied' && (
                 <button
                   onClick={() => {
-                    setViewingInquiry(inquiry);
-                    setShowViewModal(true);
+                    setSelectedInquiry(inquiry);
+                    setReplyMessage(inquiry.admin_reply || '');
+                    setShowReplyModal(true);
                   }}
-                  className="flex-1 py-2 bg-gray-100 text-gray-700 rounded-xl font-bold text-sm hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                  className="w-full py-2 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
                 >
-                  <Eye size={16} /> View
+                  <Reply size={16} /> Reply to Inquiry
                 </button>
-                {inquiry.status !== 'completed' && (
-                  <button
-                    onClick={() => {
-                      setSelectedInquiry(inquiry);
-                      setReplyMessage(inquiry.admin_reply || '');
-                      setShowReplyModal(true);
-                    }}
-                    className="flex-1 py-2 bg-blue-600 text-white rounded-xl font-bold text-sm hover:bg-blue-700 transition-all flex items-center justify-center gap-2"
-                  >
-                    <Reply size={16} /> Reply
-                  </button>
-                )}
-              </div>
+              )}
             </div>
           ))
         )}
@@ -595,13 +510,11 @@ export default function OwnerEnquiriesPage() {
             </div>
             
             <div className="p-6 space-y-4">
-              {/* Original Message */}
               <div className="p-4 bg-gray-50 rounded-2xl">
                 <p className="text-xs text-gray-500 font-bold uppercase mb-2">Original Message</p>
                 <p className="text-gray-700">{selectedInquiry.message}</p>
               </div>
               
-              {/* Reply Form */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2">
                   Your Reply <span className="text-red-500">*</span>
@@ -623,7 +536,6 @@ export default function OwnerEnquiriesPage() {
                 )}
               </div>
               
-              {/* Buttons */}
               <div className="flex gap-3 pt-4">
                 <button
                   onClick={handleReply}

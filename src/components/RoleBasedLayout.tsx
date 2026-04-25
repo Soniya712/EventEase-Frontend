@@ -1,7 +1,7 @@
 // components/RoleBasedLayout.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { 
   Home, 
@@ -18,15 +18,24 @@ import {
   Settings,
   Shield,
   Users as UsersIcon,
-  BarChart3,
   FileText,
   Package,
   MessageSquare,
   CreditCard,
-  HelpCircle
+  HelpCircle,
+  CheckCircle,
+  Clock as ClockIcon
 } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { 
+  fetchUnreadCount, 
+  fetchNotifications, 
+  markAsRead, 
+  markAllAsRead, 
+  Notification 
+} from '@/lib/notifications';
+import { formatDateTime } from '@/lib/helpers';
 
 type UserRole = 'admin' | 'owner' | 'user';
 
@@ -47,25 +56,76 @@ export default function RoleBasedLayout({
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [pendingEnquiries, setPendingEnquiries] = useState(0);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [loadingNotifs, setLoadingNotifs] = useState(false);
 
+  // Poll unread count
   useEffect(() => {
-    // Fetch pending enquiries count for owners and admins
+    const fetchUnread = async () => {
+      try {
+        const count = await fetchUnreadCount();
+        setUnreadCount(count);
+      } catch (error) {
+        console.error('Failed to fetch unread count', error);
+      }
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 30000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load notifications when dropdown opens
+  const loadNotifications = async () => {
+    if (loadingNotifs) return;
+    setLoadingNotifs(true);
+    try {
+      const { data } = await fetchNotifications();
+      setNotifications(data);
+    } catch (error) {
+      console.error('Failed to load notifications', error);
+    } finally {
+      setLoadingNotifs(false);
+    }
+  };
+
+  const handleOpenNotifications = () => {
+    if (!notificationsOpen) {
+      loadNotifications();
+    }
+    setNotificationsOpen(!notificationsOpen);
+  };
+
+  const handleMarkAsRead = async (id: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      await markAsRead(id);
+      setNotifications(prev => prev.map(n => 
+        n.id === id ? { ...n, is_read: true, read_at: new Date().toISOString() } : n
+      ));
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    } catch (error) {
+      console.error('Failed to mark as read', error);
+    }
+  };
+
+  const handleMarkAllAsRead = async () => {
+    try {
+      await markAllAsRead();
+      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+      setUnreadCount(0);
+    } catch (error) {
+      console.error('Failed to mark all as read', error);
+    }
+  };
+
+  // Fetch pending enquiries count
+  useEffect(() => {
     if (userRole === 'owner' || userRole === 'admin') {
       fetchPendingEnquiries();
+      const interval = setInterval(fetchPendingEnquiries, 30000);
+      return () => clearInterval(interval);
     }
-    
-    // Fetch notifications
-    fetchNotifications();
-    
-    // Set up interval to refresh pending enquiries every 30 seconds
-    const interval = setInterval(() => {
-      if (userRole === 'owner' || userRole === 'admin') {
-        fetchPendingEnquiries();
-      }
-    }, 30000);
-    
-    return () => clearInterval(interval);
   }, [userRole]);
 
   const fetchPendingEnquiries = async () => {
@@ -76,94 +136,25 @@ export default function RoleBasedLayout({
       let totalPending = 0;
       
       if (userRole === 'owner') {
-        // Use the optimized endpoint for owner's inquiries
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/owner/inquiries`,
-          { 
-            headers: { Authorization: `Bearer ${token}` },
-            params: { per_page: 100 } // Get more records to count
-          }
+          { headers: { Authorization: `Bearer ${token}` }, params: { per_page: 100 } }
         );
-        
         if (response.data.success && response.data.data.data) {
-          totalPending = response.data.data.data.filter(
-            (inquiry: any) => inquiry.status === 'pending'
-          ).length;
+          totalPending = response.data.data.data.filter((inquiry: any) => inquiry.status === 'pending').length;
         }
       } else if (userRole === 'admin') {
-        // For admin, get all inquiries stats
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/inquiries/stats`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
         if (response.data.success) {
           totalPending = response.data.data.pending;
         }
       }
-      
       setPendingEnquiries(totalPending);
     } catch (error) {
       console.error("Error fetching pending enquiries:", error);
-    }
-  };
-
-  const fetchNotifications = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) return;
-      
-      const mockNotifications = [];
-      
-      // Real notifications would come from an API endpoint
-      // For now, create mock notifications based on role and pending enquiries
-      if (userRole === 'owner' && pendingEnquiries > 0) {
-        mockNotifications.push({
-          id: Date.now(),
-          title: `${pendingEnquiries} Pending Enquiry${pendingEnquiries > 1 ? 'ies' : ''}`,
-          message: `You have ${pendingEnquiries} enquiry${pendingEnquiries > 1 ? 's' : ''} awaiting your response.`,
-          time: 'Just now',
-          read: false,
-          type: 'enquiry'
-        });
-      }
-      
-      if (userRole === 'owner') {
-        mockNotifications.push({
-          id: Date.now() + 1,
-          title: 'Booking Reminder',
-          message: 'You have an upcoming event this weekend.',
-          time: '2 hours ago',
-          read: true,
-          type: 'booking'
-        });
-      }
-      
-      if (userRole === 'admin' && pendingEnquiries > 0) {
-        mockNotifications.push({
-          id: Date.now(),
-          title: 'Pending Enquiries',
-          message: `${pendingEnquiries} enquiry${pendingEnquiries > 1 ? 's' : ''} waiting for response across venues.`,
-          time: 'Just now',
-          read: false,
-          type: 'enquiry'
-        });
-      }
-      
-      if (userRole === 'admin') {
-        mockNotifications.push({
-          id: Date.now() + 2,
-          title: 'New Venue Registrations',
-          message: '3 new venues pending approval.',
-          time: '1 hour ago',
-          read: false,
-          type: 'venue'
-        });
-      }
-      
-      setNotifications(mockNotifications);
-    } catch (error) {
-      console.error("Error fetching notifications:", error);
     }
   };
 
@@ -174,13 +165,22 @@ export default function RoleBasedLayout({
     router.push('/login');
   };
 
-  const markNotificationAsRead = (notificationId: number) => {
-    setNotifications(notifications.map(notif => 
-      notif.id === notificationId ? { ...notif, read: true } : notif
-    ));
+  const getNotificationIcon = (type: string) => {
+    switch (type) {
+      case 'booking_update':
+        return <CheckCircle size={16} className="text-green-500" />;
+      case 'venue_approved':
+        return <Building2 size={16} className="text-blue-500" />;
+      case 'payment_received':
+        return <ClockIcon size={16} className="text-purple-500" />;
+      case 'new_booking':
+        return <Bell size={16} className="text-yellow-500" />;
+      default:
+        return <Bell size={16} className="text-gray-500" />;
+    }
   };
 
-  // Role-specific navigation links
+  // Role-specific navigation – updated profile links to /profile
   const adminNavLinks = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: Home },
     { name: 'Users Management', href: '/admin/users', icon: UsersIcon },
@@ -188,6 +188,7 @@ export default function RoleBasedLayout({
     { name: 'Enquiries', href: '/admin/enquiries', icon: MessageCircle },
     { name: 'Payment Records', href: '/admin/payments', icon: CreditCard },
     { name: 'System Settings', href: '/admin/settings', icon: Settings },
+    { name: 'Profile', href: '/profile', icon: User }, // ✅ added profile
   ];
 
   const ownerNavLinks = [
@@ -197,7 +198,7 @@ export default function RoleBasedLayout({
     { name: 'Calendar View', href: '/owner/calendar', icon: Calendar },
     { name: 'Enquiries', href: '/owner/enquiries', icon: MessageCircle },
     { name: 'Payments', href: '/owner/payments', icon: CreditCard },
-    { name: 'Profile & Settings', href: '/owner/profile', icon: Settings },
+    { name: 'Profile', href: '/profile', icon: User }, // ✅ changed from /owner/profile to /profile
   ];
 
   const userNavLinks = [
@@ -206,10 +207,8 @@ export default function RoleBasedLayout({
     { name: 'My Bookings', href: '/my-bookings', icon: Calendar },
     { name: 'My Enquiries', href: '/my-enquiries', icon: MessageCircle },
     { name: 'Saved Venues', href: '/my-saved', icon: Heart },
-    { name: 'Booking History', href: '/history', icon: FileText },
     { name: 'Payments', href: '/payments', icon: CreditCard },
-   
-  
+    { name: 'Profile', href: '/profile', icon: User }, // ✅ added profile link
   ];
 
   const getNavLinks = () => {
@@ -222,7 +221,6 @@ export default function RoleBasedLayout({
 
   const navLinks = getNavLinks();
 
-  // Role-specific theme colors
   const getRoleColors = () => {
     switch(userRole) {
       case 'admin': return {
@@ -245,21 +243,12 @@ export default function RoleBasedLayout({
 
   const roleColors = getRoleColors();
 
-  // Role-specific quick stats
   const getQuickStats = () => {
     switch(userRole) {
       case 'admin':
-        return { 
-          label: 'Total Pending Enquiries', 
-          value: pendingEnquiries.toString(), 
-          change: pendingEnquiries > 0 ? `${pendingEnquiries} new` : 'No new' 
-        };
+        return { label: 'Total Pending Enquiries', value: pendingEnquiries.toString(), change: pendingEnquiries > 0 ? `${pendingEnquiries} new` : 'No new' };
       case 'owner':
-        return { 
-          label: 'Pending Enquiries', 
-          value: pendingEnquiries.toString(), 
-          change: pendingEnquiries > 0 ? `${pendingEnquiries} new` : 'No new' 
-        };
+        return { label: 'Pending Enquiries', value: pendingEnquiries.toString(), change: pendingEnquiries > 0 ? `${pendingEnquiries} new` : 'No new' };
       default:
         return { label: 'Upcoming Events', value: '3', change: '+1' };
     }
@@ -267,16 +256,11 @@ export default function RoleBasedLayout({
 
   const quickStats = getQuickStats();
 
-  // Calculate unread notifications count
-  const unreadNotifications = notifications.filter(n => !n.read).length;
-
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Top Navigation Bar */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Left: Logo & Mobile Menu Button */}
             <div className="flex items-center">
               <button
                 onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -284,75 +268,93 @@ export default function RoleBasedLayout({
               >
                 {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
-              
               <Link href={userRole === 'admin' ? '/admin/dashboard' : userRole === 'owner' ? '/owner/dashboard' : '/dashboard'} className="flex items-center">
                 <div className={`bg-gradient-to-r ${roleColors.primary} w-8 h-8 rounded-lg flex items-center justify-center`}>
-                  {userRole === 'admin' ? (
-                    <Shield className="text-white" size={20} />
-                  ) : (
-                    <Building2 className="text-white" size={20} />
-                  )}
+                  {userRole === 'admin' ? <Shield className="text-white" size={20} /> : <Building2 className="text-white" size={20} />}
                 </div>
                 <span className="ml-3 text-xl font-bold text-gray-900">
                   Event<span className={`text-${roleColors.secondary}-600`}>Ease</span>
                 </span>
-                <span className={`ml-2 px-2 py-1 ${roleColors.badge} text-xs font-semibold rounded-full`}>
-                  {userRole === 'admin' ? 'Admin' : userRole === 'owner' ? 'Venue Owner' : 'User'}
+                <span className={`ml-2 px-2 py-1 ${roleColors.badge} text-xs font-semibold rounded-full capitalize`}>
+                  {userRole}
                 </span>
               </Link>
             </div>
 
-            {/* Right: User Menu & Notifications */}
             <div className="flex items-center space-x-4">
               {/* Notifications */}
               <div className="relative">
                 <button
-                  onClick={() => setNotificationsOpen(!notificationsOpen)}
+                  onClick={handleOpenNotifications}
                   className="p-2 rounded-full hover:bg-gray-100 relative"
                 >
                   <Bell size={20} className="text-gray-600" />
-                  {unreadNotifications > 0 && (
-                    <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </span>
                   )}
                 </button>
-                
+
                 {notificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-10">
-                    <div className="px-4 py-2 border-b border-gray-100">
+                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 z-10">
+                    <div className="px-4 py-2 border-b border-gray-100 flex justify-between items-center">
                       <h3 className="font-semibold text-gray-900">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={handleMarkAllAsRead}
+                          className="text-xs text-pink-600 hover:text-pink-700"
+                        >
+                          Mark all as read
+                        </button>
+                      )}
                     </div>
                     <div className="max-h-96 overflow-y-auto">
-                      {notifications.length === 0 ? (
+                      {loadingNotifs ? (
+                        <div className="px-4 py-3 text-center text-gray-500">Loading...</div>
+                      ) : notifications.length === 0 ? (
                         <div className="px-4 py-8 text-center text-gray-500">
                           <Bell size={32} className="mx-auto mb-2 text-gray-300" />
-                          <p className="text-sm">No new notifications</p>
+                          <p className="text-sm">No notifications</p>
                         </div>
                       ) : (
-                        notifications.map((notification) => (
-                          <div 
-                            key={notification.id}
-                            onClick={() => markNotificationAsRead(notification.id)}
-                            className={`px-4 py-3 hover:bg-gray-50 border-b border-gray-100 cursor-pointer ${
-                              !notification.read ? 'bg-blue-50' : ''
-                            }`}
+                        notifications.map((notif) => (
+                          <div
+                            key={notif.id}
+                            className={`px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition-colors ${!notif.is_read ? 'bg-blue-50' : ''}`}
                           >
-                            <p className="text-sm font-medium text-gray-900">{notification.title}</p>
-                            <p className="text-xs text-gray-500 mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                            <div className="flex items-start gap-2">
+                              {getNotificationIcon(notif.type)}
+                              <div className="flex-1">
+                                <p className="text-sm font-medium text-gray-900">{notif.title}</p>
+                                <p className="text-xs text-gray-600 mt-0.5">{notif.message}</p>
+                                <p className="text-xs text-gray-400 mt-1">{formatDateTime(notif.created_at)}</p>
+                              </div>
+                              {!notif.is_read && (
+                                <button
+                                  onClick={(e) => handleMarkAsRead(notif.id, e)}
+                                  className="text-xs text-pink-600 hover:underline whitespace-nowrap"
+                                >
+                                  Mark read
+                                </button>
+                              )}
+                            </div>
                           </div>
                         ))
                       )}
                     </div>
-                    <div className="px-4 py-2 border-t border-gray-100">
-                      <Link href={`/${userRole}/notifications`} className="text-sm text-blue-600 hover:text-blue-800">
-                        View all notifications
-                      </Link>
-                    </div>
+                    {notifications.length > 0 && (
+                      <div className="px-4 py-2 border-t border-gray-100 text-center">
+                        <Link href="/notifications" className="text-xs text-pink-600 hover:text-pink-700">
+                          View all notifications
+                        </Link>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
 
-              {/* User Menu */}
+              {/* User Menu – profile link updated */}
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -363,9 +365,7 @@ export default function RoleBasedLayout({
                   </div>
                   <div className="hidden md:block text-left">
                     <p className="text-sm font-medium text-gray-900">{userName}</p>
-                    <p className="text-xs text-gray-500 capitalize">
-                      {userRole} Account
-                    </p>
+                    <p className="text-xs text-gray-500 capitalize">{userRole} Account</p>
                   </div>
                   <ChevronDown size={16} className="text-gray-500" />
                 </button>
@@ -376,39 +376,14 @@ export default function RoleBasedLayout({
                       <p className="text-sm font-medium text-gray-900">{userName}</p>
                       <p className="text-xs text-gray-500 capitalize">{userRole} Account</p>
                     </div>
-                    <Link
-                      href={`/${userRole}/profile`}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <User size={16} className="mr-3" />
-                      Your Profile
+                    {/* ✅ Profile link now uses `/profile` for all roles */}
+                    <Link href="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                      <User size={16} className="mr-3" /> Your Profile
                     </Link>
-                    <Link
-                      href={`/${userRole}/settings`}
-                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setUserMenuOpen(false)}
-                    >
-                      <Settings size={16} className="mr-3" />
-                      Settings
-                    </Link>
-                    {userRole === 'admin' && (
-                      <Link
-                        href="/admin/system"
-                        className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setUserMenuOpen(false)}
-                      >
-                        <Shield size={16} className="mr-3" />
-                        System Admin
-                      </Link>
-                    )}
-                    <div className="border-t border-gray-100 my-1"></div>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                    >
-                      <LogOut size={16} className="mr-3" />
-                      Sign out
+                    {/* Removed the separate Settings link – profile page handles editing */}
+                    <div className="border-t border-gray-100 my-1" />
+                    <button onClick={handleLogout} className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                      <LogOut size={16} className="mr-3" /> Sign out
                     </button>
                   </div>
                 )}
@@ -419,7 +394,7 @@ export default function RoleBasedLayout({
       </header>
 
       <div className="flex">
-        {/* Sidebar - Desktop */}
+        {/* Desktop sidebar – unchanged but uses updated navLinks */}
         <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 md:pt-16">
           <div className="flex flex-col flex-1 min-h-0 border-r border-gray-200 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
@@ -428,7 +403,6 @@ export default function RoleBasedLayout({
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
                   const isEnquiries = item.name === 'Enquiries' || item.name === 'My Enquiries';
-                  
                   return (
                     <Link
                       key={item.name}
@@ -439,43 +413,23 @@ export default function RoleBasedLayout({
                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
-                      <div className="flex items-center">
-                        <Icon size={18} className="mr-3" />
-                        {item.name}
-                      </div>
+                      <div className="flex items-center"><Icon size={18} className="mr-3" />{item.name}</div>
                       {isEnquiries && pendingEnquiries > 0 && (
-                        <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">
-                          {pendingEnquiries}
-                        </span>
+                        <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">{pendingEnquiries}</span>
                       )}
                     </Link>
                   );
                 })}
               </nav>
-              
-              {/* Quick Stats Section */}
               <div className="mt-auto mx-4 mb-4 p-4 bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl border border-gray-200">
                 <p className="text-xs font-medium text-gray-500 mb-2">{quickStats.label}</p>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-semibold text-gray-900">{quickStats.value}</span>
-                    <span className={`text-xs font-semibold ${
-                      quickStats.change.includes('+') || quickStats.change === 'No new' 
-                        ? 'text-green-600' 
-                        : 'text-red-600'
-                    }`}>
-                      {quickStats.change}
-                    </span>
+                    <span className={`text-xs font-semibold ${quickStats.change.includes('+') || quickStats.change === 'No new' ? 'text-green-600' : 'text-red-600'}`}>{quickStats.change}</span>
                   </div>
                   <div className="h-1 w-full bg-gray-200 rounded-full overflow-hidden">
-                    <div 
-                      className={`h-full bg-gradient-to-r ${roleColors.primary} transition-all duration-700 ease-out`}
-                      style={{ 
-                        width: userRole === 'admin' ? '98%' : 
-                               userRole === 'owner' ? `${Math.min((pendingEnquiries / 10) * 100, 100)}%` : 
-                               '60%' 
-                      }}
-                    ></div>
+                    <div className={`h-full bg-gradient-to-r ${roleColors.primary} transition-all duration-700 ease-out`} style={{ width: userRole === 'admin' ? '98%' : userRole === 'owner' ? `${Math.min((pendingEnquiries / 10) * 100, 100)}%` : '60%' }}></div>
                   </div>
                 </div>
               </div>
@@ -483,7 +437,7 @@ export default function RoleBasedLayout({
           </div>
         </aside>
 
-        {/* Mobile Sidebar */}
+        {/* Mobile Sidebar – same changes reflected */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 md:hidden">
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
@@ -491,29 +445,17 @@ export default function RoleBasedLayout({
               <div className="flex items-center justify-between px-4 mb-8">
                 <div className="flex items-center">
                   <div className={`bg-gradient-to-r ${roleColors.primary} w-8 h-8 rounded-lg flex items-center justify-center`}>
-                    {userRole === 'admin' ? (
-                      <Shield className="text-white" size={20} />
-                    ) : (
-                      <Building2 className="text-white" size={20} />
-                    )}
+                    {userRole === 'admin' ? <Shield className="text-white" size={20} /> : <Building2 className="text-white" size={20} />}
                   </div>
-                  <span className="ml-3 text-xl font-bold text-gray-900">
-                    Event<span className={`text-${roleColors.secondary}-600`}>Ease</span>
-                  </span>
+                  <span className="ml-3 text-xl font-bold text-gray-900">Event<span className={`text-${roleColors.secondary}-600`}>Ease</span></span>
                 </div>
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"
-                >
-                  <X size={24} />
-                </button>
+                <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100"><X size={24} /></button>
               </div>
               <nav className="flex-1 px-4 space-y-1 overflow-y-auto">
                 {navLinks.map((item) => {
                   const Icon = item.icon;
                   const isActive = pathname === item.href;
                   const isEnquiries = item.name === 'Enquiries' || item.name === 'My Enquiries';
-                  
                   return (
                     <Link
                       key={item.name}
@@ -525,15 +467,8 @@ export default function RoleBasedLayout({
                           : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
-                      <div className="flex items-center">
-                        <Icon size={20} className="mr-3" />
-                        {item.name}
-                      </div>
-                      {isEnquiries && pendingEnquiries > 0 && (
-                        <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">
-                          {pendingEnquiries}
-                        </span>
-                      )}
+                      <div className="flex items-center"><Icon size={20} className="mr-3" />{item.name}</div>
+                      {isEnquiries && pendingEnquiries > 0 && <span className="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-0.5 rounded-full">{pendingEnquiries}</span>}
                     </Link>
                   );
                 })}
@@ -542,12 +477,9 @@ export default function RoleBasedLayout({
           </div>
         )}
 
-        {/* Main Content */}
         <main className="md:pl-64 flex-1">
           <div className="py-6">
-            <div className="mx-auto px-4 sm:px-6 md:px-8">
-              {children}
-            </div>
+            <div className="mx-auto px-4 sm:px-6 md:px-8">{children}</div>
           </div>
         </main>
       </div>
