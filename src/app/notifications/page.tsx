@@ -1,7 +1,7 @@
-// app/notifications/page.tsx
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import RoleBasedLayout from "@/components/RoleBasedLayout";
 import { Notification, fetchNotifications, markAsRead, markAllAsRead } from "@/lib/notifications";
 import { formatDateTime } from "@/lib/helpers";
@@ -11,6 +11,7 @@ import Link from "next/link";
 type UserRole = "admin" | "owner" | "user";
 
 export default function NotificationsPage() {
+  const router = useRouter();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const [userName, setUserName] = useState("");
@@ -28,7 +29,7 @@ export default function NotificationsPage() {
   }, []);
 
   const loadNotifications = useCallback(async (reset: boolean = true) => {
-    if (!userName) return; // wait for user name
+    if (!userName) return;
     setLoading(true);
     try {
       const { data, total: totalCount } = await fetchNotifications(reset ? 1 : page);
@@ -46,23 +47,22 @@ export default function NotificationsPage() {
     } finally {
       setLoading(false);
     }
-  }, [userName, page]);
+  }, [userName, page, notifications.length]);
 
-  // Initial load when userName is ready
   useEffect(() => {
     if (userName) {
       loadNotifications(true);
     }
   }, [userName, loadNotifications]);
 
-  // Load more when page changes (for pagination)
   useEffect(() => {
     if (page > 1) {
       loadNotifications(false);
     }
   }, [page, loadNotifications]);
 
-  const handleMarkAsRead = async (id: number) => {
+  const handleMarkAsRead = async (id: number, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
     try {
       await markAsRead(id);
       setNotifications(prev =>
@@ -108,6 +108,29 @@ export default function NotificationsPage() {
     }
   };
 
+  // 🧭 REDIRECT ON NOTIFICATION CLICK
+  const handleNotificationClick = (notif: Notification) => {
+    // Mark as read automatically when clicked
+    if (!notif.is_read) {
+      handleMarkAsRead(notif.id);
+    }
+    let data = notif.data;
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) {
+        data = {};
+      }
+    }
+    if (notif.type === 'new_inquiry' && data?.role === 'owner') {
+      router.push(`/owner/enquiries?inquiry=${data.inquiry_id}`);
+    } else if (notif.type === 'inquiry_reply' && data?.role === 'customer') {
+      router.push(`/my-enquiries?inquiry=${data.inquiry_id}`);
+    } else if (notif.type === 'booking_update' && data?.booking_id) {
+      router.push(getBookingLink(data.booking_id));
+    }
+  };
+
   const hasUnread = notifications.some(n => !n.is_read);
 
   if (loading && notifications.length === 0) {
@@ -147,41 +170,53 @@ export default function NotificationsPage() {
         </div>
       ) : (
         <div className="space-y-3">
-          {notifications.map((notif) => (
-            <div
-              key={notif.id}
-              className={`bg-white rounded-xl border p-5 transition-all ${
-                !notif.is_read ? "border-l-4 border-l-pink-500 shadow-md" : "border-gray-200"
-              }`}
-            >
-              <div className="flex items-start gap-4">
-                <div className="p-2 bg-gray-100 rounded-lg">{getIcon(notif.type)}</div>
-                <div className="flex-1">
-                  <div className="flex justify-between items-start">
-                    <h3 className="font-semibold text-gray-900">{notif.title}</h3>
-                    {!notif.is_read && (
-                      <button
-                        onClick={() => handleMarkAsRead(notif.id)}
-                        className="text-xs text-pink-600 flex items-center gap-1 hover:underline"
+          {notifications.map((notif) => {
+            let isClickable = false;
+            let data = notif.data;
+            if (typeof data === 'string') {
+              try { data = JSON.parse(data); } catch(e) { data = {}; }
+            }
+            isClickable = (notif.type === 'new_inquiry' && data?.role === 'owner') ||
+                          (notif.type === 'inquiry_reply' && data?.role === 'customer') ||
+                          (notif.type === 'booking_update' && data?.booking_id);
+            return (
+              <div
+                key={notif.id}
+                onClick={isClickable ? () => handleNotificationClick(notif) : undefined}
+                className={`bg-white rounded-xl border p-5 transition-all ${
+                  !notif.is_read ? "border-l-4 border-l-pink-500 shadow-md" : "border-gray-200"
+                } ${isClickable ? 'cursor-pointer hover:shadow-md' : ''}`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="p-2 bg-gray-100 rounded-lg">{getIcon(notif.type)}</div>
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start">
+                      <h3 className="font-semibold text-gray-900">{notif.title}</h3>
+                      {!notif.is_read && (
+                        <button
+                          onClick={(e) => handleMarkAsRead(notif.id, e)}
+                          className="text-xs text-pink-600 flex items-center gap-1 hover:underline"
+                        >
+                          <Eye size={14} /> Mark read
+                        </button>
+                      )}
+                    </div>
+                    <p className="text-gray-600 text-sm mt-1">{notif.message}</p>
+                    <p className="text-xs text-gray-400 mt-2">{formatDateTime(notif.created_at)}</p>
+                    {notif.data?.booking_id && (
+                      <Link
+                        href={getBookingLink(notif.data.booking_id)}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-xs text-pink-600 hover:underline mt-2 inline-block"
                       >
-                        <Eye size={14} /> Mark read
-                      </button>
+                        View booking →
+                      </Link>
                     )}
                   </div>
-                  <p className="text-gray-600 text-sm mt-1">{notif.message}</p>
-                  <p className="text-xs text-gray-400 mt-2">{formatDateTime(notif.created_at)}</p>
-                  {notif.data?.booking_id && (
-                    <Link
-                      href={getBookingLink(notif.data.booking_id)}
-                      className="text-xs text-pink-600 hover:underline mt-2 inline-block"
-                    >
-                      View booking →
-                    </Link>
-                  )}
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
           {hasMore && (
             <div className="text-center pt-4">
               <button

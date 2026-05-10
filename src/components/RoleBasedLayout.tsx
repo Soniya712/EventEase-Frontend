@@ -1,4 +1,3 @@
-// components/RoleBasedLayout.tsx
 "use client";
 
 import { useState, useEffect, useCallback } from 'react';
@@ -18,11 +17,7 @@ import {
   Settings,
   Shield,
   Users as UsersIcon,
-  FileText,
-  Package,
-  MessageSquare,
   CreditCard,
-  HelpCircle,
   CheckCircle,
   Clock as ClockIcon
 } from "lucide-react";
@@ -119,6 +114,32 @@ export default function RoleBasedLayout({
     }
   };
 
+  // 🧭 REDIRECT NOTIFICATION CLICK
+  const handleNotificationClick = (notif: Notification) => {
+    // Mark as read automatically when clicked (optional)
+    if (!notif.is_read) {
+      markAsRead(notif.id).catch(console.error);
+    }
+    // Parse data (it might be a string from API)
+    let data = notif.data;
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) {
+        data = {};
+      }
+    }
+    if (notif.type === 'new_inquiry' && data?.role === 'owner') {
+      router.push(`/owner/enquiries?inquiry=${data.inquiry_id}`);
+    } else if (notif.type === 'inquiry_reply' && data?.role === 'customer') {
+      router.push(`/my-enquiries?inquiry=${data.inquiry_id}`);
+    } else if (notif.type === 'booking_update' && data?.booking_id) {
+      router.push(`/my-bookings?booking=${data.booking_id}`);
+    }
+    // Close dropdown after navigation
+    setNotificationsOpen(false);
+  };
+
   // Fetch pending enquiries count
   useEffect(() => {
     if (userRole === 'owner' || userRole === 'admin') {
@@ -180,22 +201,21 @@ export default function RoleBasedLayout({
     }
   };
 
-  // Role-specific navigation – updated profile links to /profile
+  // Navigation links (unchanged)
   const adminNavLinks = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: Home },
     { name: 'Users Management', href: '/admin/users', icon: UsersIcon },
     { name: 'Venues Management', href: '/admin/venues', icon: Building2 },
-    { name: 'Profile', href: '/profile', icon: User }, // ✅ added profile
+    { name: 'Profile', href: '/profile', icon: User },
   ];
 
   const ownerNavLinks = [
     { name: 'Dashboard', href: '/owner/dashboard', icon: Home },
     { name: 'My Venues', href: '/owner/venues', icon: Building2 },
     { name: 'Booking Requests', href: '/owner/bookings', icon: Calendar },
-    { name: 'Calendar View', href: '/owner/calendar', icon: Calendar },
     { name: 'Enquiries', href: '/owner/enquiries', icon: MessageCircle },
     { name: 'Payments', href: '/owner/payments', icon: CreditCard },
-    { name: 'Profile', href: '/profile', icon: User }, // ✅ changed from /owner/profile to /profile
+    { name: 'Profile', href: '/profile', icon: User },
   ];
 
   const userNavLinks = [
@@ -205,7 +225,7 @@ export default function RoleBasedLayout({
     { name: 'My Enquiries', href: '/my-enquiries', icon: MessageCircle },
     { name: 'Saved Venues', href: '/my-saved', icon: Heart },
     { name: 'Payments', href: '/payments', icon: CreditCard },
-    { name: 'Profile', href: '/profile', icon: User }, // ✅ added profile link
+    { name: 'Profile', href: '/profile', icon: User },
   ];
 
   const getNavLinks = () => {
@@ -315,29 +335,41 @@ export default function RoleBasedLayout({
                           <p className="text-sm">No notifications</p>
                         </div>
                       ) : (
-                        notifications.map((notif) => (
-                          <div
-                            key={notif.id}
-                            className={`px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition-colors ${!notif.is_read ? 'bg-blue-50' : ''}`}
-                          >
-                            <div className="flex items-start gap-2">
-                              {getNotificationIcon(notif.type)}
-                              <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-900">{notif.title}</p>
-                                <p className="text-xs text-gray-600 mt-0.5">{notif.message}</p>
-                                <p className="text-xs text-gray-400 mt-1">{formatDateTime(notif.created_at)}</p>
+                        notifications.map((notif) => {
+                          let clickable = false;
+                          let data = notif.data;
+                          if (typeof data === 'string') {
+                            try { data = JSON.parse(data); } catch(e) { data = {}; }
+                          }
+                          const isEnquiryOrBooking = 
+                            notif.type === 'new_inquiry' ||
+                            notif.type === 'inquiry_reply' ||
+                            notif.type === 'booking_update';
+                          return (
+                            <div
+                              key={notif.id}
+                              onClick={isEnquiryOrBooking ? () => handleNotificationClick(notif) : undefined}
+                              className={`px-4 py-3 border-b border-gray-100 transition-colors ${!notif.is_read ? 'bg-blue-50' : 'hover:bg-gray-50'} ${isEnquiryOrBooking ? 'cursor-pointer' : ''}`}
+                            >
+                              <div className="flex items-start gap-2">
+                                {getNotificationIcon(notif.type)}
+                                <div className="flex-1">
+                                  <p className="text-sm font-medium text-gray-900">{notif.title}</p>
+                                  <p className="text-xs text-gray-600 mt-0.5">{notif.message}</p>
+                                  <p className="text-xs text-gray-400 mt-1">{formatDateTime(notif.created_at)}</p>
+                                </div>
+                                {!notif.is_read && (
+                                  <button
+                                    onClick={(e) => handleMarkAsRead(notif.id, e)}
+                                    className="text-xs text-pink-600 hover:underline whitespace-nowrap"
+                                  >
+                                    Mark read
+                                  </button>
+                                )}
                               </div>
-                              {!notif.is_read && (
-                                <button
-                                  onClick={(e) => handleMarkAsRead(notif.id, e)}
-                                  className="text-xs text-pink-600 hover:underline whitespace-nowrap"
-                                >
-                                  Mark read
-                                </button>
-                              )}
                             </div>
-                          </div>
-                        ))
+                          );
+                        })
                       )}
                     </div>
                     {notifications.length > 0 && (
@@ -351,7 +383,7 @@ export default function RoleBasedLayout({
                 )}
               </div>
 
-              {/* User Menu – profile link updated */}
+              {/* User Menu */}
               <div className="relative">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -373,11 +405,9 @@ export default function RoleBasedLayout({
                       <p className="text-sm font-medium text-gray-900">{userName}</p>
                       <p className="text-xs text-gray-500 capitalize">{userRole} Account</p>
                     </div>
-                    {/* ✅ Profile link now uses `/profile` for all roles */}
                     <Link href="/profile" className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                       <User size={16} className="mr-3" /> Your Profile
                     </Link>
-                    {/* Removed the separate Settings link – profile page handles editing */}
                     <div className="border-t border-gray-100 my-1" />
                     <button onClick={handleLogout} className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
                       <LogOut size={16} className="mr-3" /> Sign out
@@ -390,8 +420,8 @@ export default function RoleBasedLayout({
         </div>
       </header>
 
+      {/* Sidebar / Main content unchanged... */}
       <div className="flex">
-        {/* Desktop sidebar – unchanged but uses updated navLinks */}
         <aside className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0 md:pt-16">
           <div className="flex flex-col flex-1 min-h-0 border-r border-gray-200 bg-white">
             <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
@@ -434,7 +464,6 @@ export default function RoleBasedLayout({
           </div>
         </aside>
 
-        {/* Mobile Sidebar – same changes reflected */}
         {sidebarOpen && (
           <div className="fixed inset-0 z-40 md:hidden">
             <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)}></div>
