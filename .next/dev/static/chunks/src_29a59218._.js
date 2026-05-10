@@ -137,7 +137,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lu
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/settings.js [app-client] (ecmascript) <export default as Settings>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shield$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/shield.js [app-client] (ecmascript) <export default as Shield>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$users$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Users$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/users.js [app-client] (ecmascript) <export default as Users>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/file-text.js [app-client] (ecmascript) <export default as FileText>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/credit-card.js [app-client] (ecmascript) <export default as CreditCard>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$circle$2d$check$2d$big$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CheckCircle$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/circle-check-big.js [app-client] (ecmascript) <export default as CheckCircle>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$clock$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Clock$3e$__ = __turbopack_context__.i("[project]/node_modules/.pnpm/lucide-react@0.562.0_react@19.2.3/node_modules/lucide-react/dist/esm/icons/clock.js [app-client] (ecmascript) <export default as Clock>");
@@ -232,7 +231,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
             console.error('Failed to mark all as read', error);
         }
     };
-    // Fetch pending enquiries count (for owners and admins) – keep as is
+    // Fetch pending enquiries count
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "RoleBasedLayout.useEffect": ()=>{
             if (userRole === 'owner' || userRole === 'admin') {
@@ -333,7 +332,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                 }, this);
         }
     };
-    // Role-specific navigation (unchanged)
+    // Role-specific navigation – updated profile links to /profile
     const adminNavLinks = [
         {
             name: 'Dashboard',
@@ -364,6 +363,11 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
             name: 'System Settings',
             href: '/admin/settings',
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"]
+        },
+        {
+            name: 'Profile',
+            href: '/profile',
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"]
         }
     ];
     const ownerNavLinks = [
@@ -398,9 +402,9 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__["CreditCard"]
         },
         {
-            name: 'Profile & Settings',
-            href: '/owner/profile',
-            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"]
+            name: 'Profile',
+            href: '/profile',
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"]
         }
     ];
     const userNavLinks = [
@@ -430,14 +434,14 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$heart$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Heart$3e$__["Heart"]
         },
         {
-            name: 'Booking History',
-            href: '/history',
-            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"]
-        },
-        {
             name: 'Payments',
             href: '/payments',
             icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$credit$2d$card$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__CreditCard$3e$__["CreditCard"]
+        },
+        {
+            name: 'Profile',
+            href: '/profile',
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"]
         }
     ];
     const getNavLinks = ()=>{
@@ -517,18 +521,18 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                             size: 24
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                            lineNumber: 268,
+                                            lineNumber: 269,
                                             columnNumber: 32
                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                                             size: 24
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                            lineNumber: 268,
+                                            lineNumber: 269,
                                             columnNumber: 50
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 264,
+                                        lineNumber: 265,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -542,19 +546,19 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                     size: 20
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                    lineNumber: 272,
+                                                    lineNumber: 273,
                                                     columnNumber: 43
                                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$building$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Building2$3e$__["Building2"], {
                                                     className: "text-white",
                                                     size: 20
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                    lineNumber: 272,
+                                                    lineNumber: 273,
                                                     columnNumber: 89
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 271,
+                                                lineNumber: 272,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -566,13 +570,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         children: "Ease"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 275,
+                                                        lineNumber: 276,
                                                         columnNumber: 24
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 274,
+                                                lineNumber: 275,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -580,19 +584,19 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                 children: userRole
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 277,
+                                                lineNumber: 278,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 270,
+                                        lineNumber: 271,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 263,
+                                lineNumber: 264,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -610,7 +614,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         className: "text-gray-600"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 290,
+                                                        lineNumber: 291,
                                                         columnNumber: 19
                                                     }, this),
                                                     unreadCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -618,13 +622,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         children: unreadCount > 9 ? '9+' : unreadCount
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 292,
+                                                        lineNumber: 293,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 286,
+                                                lineNumber: 287,
                                                 columnNumber: 17
                                             }, this),
                                             notificationsOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -638,7 +642,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: "Notifications"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 301,
+                                                                lineNumber: 302,
                                                                 columnNumber: 23
                                                             }, this),
                                                             unreadCount > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -647,13 +651,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: "Mark all as read"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 303,
+                                                                lineNumber: 304,
                                                                 columnNumber: 25
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 300,
+                                                        lineNumber: 301,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -663,7 +667,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                             children: "Loading..."
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 313,
+                                                            lineNumber: 314,
                                                             columnNumber: 25
                                                         }, this) : notifications.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "px-4 py-8 text-center text-gray-500",
@@ -673,7 +677,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                     className: "mx-auto mb-2 text-gray-300"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                    lineNumber: 316,
+                                                                    lineNumber: 317,
                                                                     columnNumber: 27
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -681,13 +685,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                     children: "No notifications"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                    lineNumber: 317,
+                                                                    lineNumber: 318,
                                                                     columnNumber: 27
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 315,
+                                                            lineNumber: 316,
                                                             columnNumber: 25
                                                         }, this) : notifications.map((notif)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                 className: `px-4 py-3 hover:bg-gray-50 border-b border-gray-100 transition-colors ${!notif.is_read ? 'bg-blue-50' : ''}`,
@@ -703,7 +707,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                                     children: notif.title
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                                    lineNumber: 328,
+                                                                                    lineNumber: 329,
                                                                                     columnNumber: 33
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -711,7 +715,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                                     children: notif.message
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                                    lineNumber: 329,
+                                                                                    lineNumber: 330,
                                                                                     columnNumber: 33
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -719,13 +723,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                                     children: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$lib$2f$helpers$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["formatDateTime"])(notif.created_at)
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                                    lineNumber: 330,
+                                                                                    lineNumber: 331,
                                                                                     columnNumber: 33
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                            lineNumber: 327,
+                                                                            lineNumber: 328,
                                                                             columnNumber: 31
                                                                         }, this),
                                                                         !notif.is_read && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -734,23 +738,23 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                             children: "Mark read"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                            lineNumber: 333,
+                                                                            lineNumber: 334,
                                                                             columnNumber: 33
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                    lineNumber: 325,
+                                                                    lineNumber: 326,
                                                                     columnNumber: 29
                                                                 }, this)
                                                             }, notif.id, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 321,
+                                                                lineNumber: 322,
                                                                 columnNumber: 27
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 311,
+                                                        lineNumber: 312,
                                                         columnNumber: 21
                                                     }, this),
                                                     notifications.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -761,24 +765,24 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                             children: "View all notifications"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 347,
+                                                            lineNumber: 348,
                                                             columnNumber: 25
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 346,
+                                                        lineNumber: 347,
                                                         columnNumber: 23
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 299,
+                                                lineNumber: 300,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 285,
+                                        lineNumber: 286,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -793,7 +797,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         children: userName.charAt(0).toUpperCase()
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 362,
+                                                        lineNumber: 363,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -804,7 +808,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: userName
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 366,
+                                                                lineNumber: 367,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -815,13 +819,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 367,
+                                                                lineNumber: 368,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 365,
+                                                        lineNumber: 366,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
@@ -829,13 +833,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         className: "text-gray-500"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 369,
+                                                        lineNumber: 370,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 358,
+                                                lineNumber: 359,
                                                 columnNumber: 17
                                             }, this),
                                             userMenuOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -849,7 +853,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: userName
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 375,
+                                                                lineNumber: 376,
                                                                 columnNumber: 23
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -860,17 +864,17 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 ]
                                                             }, void 0, true, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 376,
+                                                                lineNumber: 377,
                                                                 columnNumber: 23
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 374,
+                                                        lineNumber: 375,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                        href: `/${userRole}/profile`,
+                                                        href: "/profile",
                                                         className: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
                                                         children: [
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$user$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__User$3e$__["User"], {
@@ -878,59 +882,21 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 className: "mr-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 379,
+                                                                lineNumber: 381,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " Your Profile"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 378,
+                                                        lineNumber: 380,
                                                         columnNumber: 21
-                                                    }, this),
-                                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                        href: `/${userRole}/settings`,
-                                                        className: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$settings$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Settings$3e$__["Settings"], {
-                                                                size: 16,
-                                                                className: "mr-3"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 382,
-                                                                columnNumber: 23
-                                                            }, this),
-                                                            " Settings"
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 381,
-                                                        columnNumber: 21
-                                                    }, this),
-                                                    userRole === 'admin' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$client$2f$app$2d$dir$2f$link$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
-                                                        href: "/admin/system",
-                                                        className: "flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100",
-                                                        children: [
-                                                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$shield$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Shield$3e$__["Shield"], {
-                                                                size: 16,
-                                                                className: "mr-3"
-                                                            }, void 0, false, {
-                                                                fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 386,
-                                                                columnNumber: 25
-                                                            }, this),
-                                                            " System Admin"
-                                                        ]
-                                                    }, void 0, true, {
-                                                        fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 385,
-                                                        columnNumber: 23
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                         className: "border-t border-gray-100 my-1"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 389,
+                                                        lineNumber: 384,
                                                         columnNumber: 21
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -942,48 +908,48 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 className: "mr-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 391,
+                                                                lineNumber: 386,
                                                                 columnNumber: 23
                                                             }, this),
                                                             " Sign out"
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 390,
+                                                        lineNumber: 385,
                                                         columnNumber: 21
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 373,
+                                                lineNumber: 374,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 357,
+                                        lineNumber: 358,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 283,
+                                lineNumber: 284,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                        lineNumber: 262,
+                        lineNumber: 263,
                         columnNumber: 11
                     }, this)
                 }, void 0, false, {
                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                    lineNumber: 261,
+                    lineNumber: 262,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                lineNumber: 260,
+                lineNumber: 261,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1014,14 +980,14 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 className: "mr-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 421,
+                                                                lineNumber: 416,
                                                                 columnNumber: 58
                                                             }, this),
                                                             item.name
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 421,
+                                                        lineNumber: 416,
                                                         columnNumber: 23
                                                     }, this),
                                                     isEnquiries && pendingEnquiries > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1029,19 +995,19 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         children: pendingEnquiries
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 423,
+                                                        lineNumber: 418,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, item.name, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 412,
+                                                lineNumber: 407,
                                                 columnNumber: 21
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 406,
+                                        lineNumber: 401,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1052,7 +1018,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                 children: quickStats.label
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 430,
+                                                lineNumber: 425,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1066,7 +1032,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: quickStats.value
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 433,
+                                                                lineNumber: 428,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1074,13 +1040,13 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: quickStats.change
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 434,
+                                                                lineNumber: 429,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 432,
+                                                        lineNumber: 427,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1092,40 +1058,40 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                             }
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 437,
+                                                            lineNumber: 432,
                                                             columnNumber: 21
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 436,
+                                                        lineNumber: 431,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 431,
+                                                lineNumber: 426,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 429,
+                                        lineNumber: 424,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 405,
+                                lineNumber: 400,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                            lineNumber: 404,
+                            lineNumber: 399,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                        lineNumber: 403,
+                        lineNumber: 398,
                         columnNumber: 9
                     }, this),
                     sidebarOpen && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1136,7 +1102,7 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                 onClick: ()=>setSidebarOpen(false)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 448,
+                                lineNumber: 443,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1155,19 +1121,19 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 453,
+                                                            lineNumber: 448,
                                                             columnNumber: 45
                                                         }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$lucide$2d$react$40$0$2e$562$2e$0_react$40$19$2e$2$2e$3$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$building$2d$2$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Building2$3e$__["Building2"], {
                                                             className: "text-white",
                                                             size: 20
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                            lineNumber: 453,
+                                                            lineNumber: 448,
                                                             columnNumber: 91
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 452,
+                                                        lineNumber: 447,
                                                         columnNumber: 19
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1179,19 +1145,19 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 children: "Ease"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 455,
+                                                                lineNumber: 450,
                                                                 columnNumber: 79
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 455,
+                                                        lineNumber: 450,
                                                         columnNumber: 19
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 451,
+                                                lineNumber: 446,
                                                 columnNumber: 17
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1201,18 +1167,18 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                     size: 24
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                    lineNumber: 457,
+                                                    lineNumber: 452,
                                                     columnNumber: 142
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 457,
+                                                lineNumber: 452,
                                                 columnNumber: 17
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 450,
+                                        lineNumber: 445,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -1234,14 +1200,14 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                                 className: "mr-3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                                lineNumber: 475,
+                                                                lineNumber: 470,
                                                                 columnNumber: 58
                                                             }, this),
                                                             item.name
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 475,
+                                                        lineNumber: 470,
                                                         columnNumber: 23
                                                     }, this),
                                                     isEnquiries && pendingEnquiries > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1249,31 +1215,31 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                                         children: pendingEnquiries
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                        lineNumber: 476,
+                                                        lineNumber: 471,
                                                         columnNumber: 63
                                                     }, this)
                                                 ]
                                             }, item.name, true, {
                                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                                lineNumber: 465,
+                                                lineNumber: 460,
                                                 columnNumber: 21
                                             }, this);
                                         })
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                        lineNumber: 459,
+                                        lineNumber: 454,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 449,
+                                lineNumber: 444,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                        lineNumber: 447,
+                        lineNumber: 442,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$16$2e$1$2e$1_$40$babel$2b$core$40$7$2e$29$2e$0_react$2d$dom$40$19$2e$2$2e$3_react$40$19$2e$2$2e$3_$5f$react$40$19$2e$2$2e$3$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1285,29 +1251,29 @@ function RoleBasedLayout({ children, userName = 'User', userRole = 'user' }) {
                                 children: children
                             }, void 0, false, {
                                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                                lineNumber: 487,
+                                lineNumber: 482,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                            lineNumber: 486,
+                            lineNumber: 481,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                        lineNumber: 485,
+                        lineNumber: 480,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/RoleBasedLayout.tsx",
-                lineNumber: 401,
+                lineNumber: 396,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/RoleBasedLayout.tsx",
-        lineNumber: 259,
+        lineNumber: 260,
         columnNumber: 5
     }, this);
 }

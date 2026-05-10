@@ -4,6 +4,7 @@ import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { User, Building2, Eye, EyeOff, Calendar } from "lucide-react";
+import { useGoogleLogin } from "@react-oauth/google";
 
 export default function Register() {
   const router = useRouter();
@@ -19,6 +20,7 @@ export default function Register() {
     password_confirmation: "",
   });
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -26,6 +28,7 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  // Regular email/phone registration
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setLoading(true);
@@ -35,7 +38,7 @@ export default function Register() {
         role: role,
       });
 
-      // If registration is successful, automatically log them in
+      // Auto login after registration
       const loginResponse = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/login`, {
         login: formData.email,
         password: formData.password,
@@ -43,7 +46,6 @@ export default function Register() {
 
       const { token, role: userRole, user } = loginResponse.data;
 
-      // Save user data
       localStorage.setItem("token", token);
       localStorage.setItem("user_role", userRole);
       localStorage.setItem("user_name", user.name);
@@ -51,7 +53,6 @@ export default function Register() {
 
       alert(`Welcome to EventEase, ${user.name}! Your account has been created successfully.`);
 
-      // Redirect based on role (same logic as login)
       if (userRole === 'admin') {
         router.push("/admin/dashboard");
       } else if (userRole === 'owner') {
@@ -66,6 +67,36 @@ export default function Register() {
       setLoading(false);
     }
   };
+
+  // Google Sign‑up / Login (backend will create user if not exists)
+  const googleSignup = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      setGoogleLoading(true);
+      try {
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`, {
+          access_token: tokenResponse.access_token,
+        });
+
+        const { token, user, role: userRole, redirect_to } = res.data;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user_role", userRole);
+        localStorage.setItem("user_name", user.name);
+        localStorage.setItem("user_email", user.email);
+
+        alert(`Welcome, ${user.name}! Your account has been ${user.provider_id ? 'linked' : 'created'} successfully.`);
+        router.push(redirect_to);
+      } catch (error) {
+        console.error("Google signup failed", error);
+        alert("Google signup failed. Please try again.");
+      } finally {
+        setGoogleLoading(false);
+      }
+    },
+    onError: () => {
+      alert("Google signup failed. Please try again.");
+    },
+  });
 
   return (
     <div className="min-h-screen flex bg-gradient-to-br from-purple-50 to-pink-50">
@@ -289,6 +320,34 @@ export default function Register() {
               </button>
             </form>
 
+            {/* Divider & Google Sign-up */}
+            <div className="my-8 flex items-center">
+              <div className="flex-grow border-t border-gray-300"></div>
+              <span className="mx-4 text-sm text-gray-500">Or continue with</span>
+              <div className="flex-grow border-t border-gray-300"></div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => googleSignup()}
+              disabled={googleLoading}
+              className="w-full border border-gray-300 rounded-xl py-4 flex items-center justify-center gap-3 hover:bg-gray-50 transition-colors duration-200 disabled:opacity-50"
+            >
+              {googleLoading ? (
+                <div className="w-5 h-5 border-2 border-gray-600 border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                  </svg>
+                  <span className="text-sm font-medium text-gray-700">Sign up with Google</span>
+                </>
+              )}
+            </button>
+
             {/* Login Link */}
             <div className="mt-8 pt-6 border-t border-gray-100 text-center">
               <p className="text-gray-600">
@@ -302,7 +361,7 @@ export default function Register() {
         </div>
       </div>
 
-      {/* Right Side - Benefits & Features */}
+      {/* Right Side - Benefits & Features (unchanged) */}
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-pink-600 to-purple-600 text-white p-8 md:p-12 flex-col justify-center">
         <div className="max-w-lg mx-auto">
           <div className="mb-10">
@@ -314,7 +373,6 @@ export default function Register() {
             </p>
           </div>
 
-          {/* Benefits Grid */}
           <div className="grid grid-cols-1 gap-6 mb-10">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6">
               <div className="flex items-start gap-4">
@@ -361,7 +419,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Stats */}
           <div className="grid grid-cols-2 gap-6 mb-10">
             <div className="text-center">
               <div className="text-4xl font-bold mb-2">500+</div>
@@ -381,7 +438,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* Testimonial */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 mb-8">
             <p className="italic text-lg mb-4">
               "As a venue owner, EventEase helped me increase bookings by 300% in just 3 months!"
@@ -397,7 +453,6 @@ export default function Register() {
             </div>
           </div>
 
-          {/* CTA */}
           <div className="text-center">
             <p className="text-xl opacity-90 mb-6">
               Ready to start your event planning journey?
