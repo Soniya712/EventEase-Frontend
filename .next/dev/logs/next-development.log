@@ -266,3 +266,73 @@ https://react.dev/link/hydration-mismatch
         ...
       ...
 
+[01:26:22.719] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:22.884] Browser ERROR   uncaughtError: Error: Hydration failed because the server rendered text didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <RedirectErrorBoundary router={{...}}>
+      <InnerLayoutRouter url="/admin/ven..." tree={[...]} params={{}} cacheNode={{rsc:<Fragment>, ...}} ...>
+        <SegmentViewNode type="page" pagePath="admin/venu...">
+          <SegmentTrieNode>
+          <ClientPageRoot Component={function AdminVenueApprovalsPage} serverProvidedParams={{...}}>
+            <AdminVenueApprovalsPage params={Promise} searchParams={Promise}>
+              <RoleBasedLayout userName="Super Admin" userRole="admin">
+                <div className="min-h-scre...">
+                  <header className="bg-white b...">
+                    <div className="px-4 sm:px...">
+                      <div className="flex items...">
+                        <div>
+                        <div className="flex items...">
+                          <div>
+                          <div className="relative">
+                            <button onClick={function onClick} className="flex items...">
+                              <div
+                                className="w-8 h-8 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full flex it..."
+                              >
++                               S
+-                               A
+                              ...
+                  ...
+        ...
+      ...
+
+[01:26:36.344] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:27:15.080] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:27:16.052] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:27:20.160] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:28:21.145] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:28:34.724] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:34:15.207] Server  LOG     ✓ Compiled in 836ms
+[01:36:49.960] Server  LOG     ✓ Compiled in 124ms
+[01:37:04.934] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:06.201] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:55.662] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:55.908] Browser ERROR   Error fetching venue details: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer 152|l8XlonOf0ybUkfhG95kdIYxdDbovgQx2vxRVkl7Q9fd7a790"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"http://127.0.0.1:8000/api/venues/8","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:3789:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:4305:225)\n    at Axios.request (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:5113:49)\n    at async fetchVenueDetails (http://localhost:3000/_next/static/chunks/src_ac974550._.js:686:25)","status":404}
+[01:38:00.824] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:38:01.031] Browser ERROR   Error fetching venue details: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer 152|l8XlonOf0ybUkfhG95kdIYxdDbovgQx2vxRVkl7Q9fd7a790"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"http://127.0.0.1:8000/api/venues/8","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:3789:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:4305:225)\n    at Axios.request (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:5113:49)\n    at async fetchVenueDetails (http://localhost:3000/_next/static/chunks/src_ac974550._.js:686:25)","status":404}
+[01:38:18.731] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:38:24.599] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:38:30.927] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:40:28.740] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:41:13.833] Server  LOG     ✓ Compiled in 187ms
+[01:41:17.009] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:43:52.608] Server  LOG     ✓ Compiled in 74ms
+[01:44:56.672] Server  LOG     ✓ Compiled in 61ms
+[01:45:06.323] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:03.824] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:05.495] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:14.146] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:14.378] Browser ERROR   Error fetching venue details: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer 152|l8XlonOf0ybUkfhG95kdIYxdDbovgQx2vxRVkl7Q9fd7a790"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"http://127.0.0.1:8000/api/venues/8","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:3789:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:4305:225)\n    at Axios.request (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:5113:49)\n    at async fetchVenueDetails (http://localhost:3000/_next/static/chunks/src_ac974550._.js:686:25)","status":404}
+[01:46:19.467] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:27.587] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:46:27.812] Browser ERROR   Error fetching venue details: {"code":"ERR_BAD_REQUEST","config":{"adapter":["xhr","http","fetch"],"allowAbsoluteUrls":true,"env":{},"headers":{"Accept":"application/json, text/plain, */*","Authorization":"Bearer 152|l8XlonOf0ybUkfhG95kdIYxdDbovgQx2vxRVkl7Q9fd7a790"},"maxBodyLength":-1,"maxContentLength":-1,"method":"get","timeout":0,"transformRequest":[null],"transformResponse":[null],"transitional":{"clarifyTimeoutError":false,"forcedJSONParsing":true,"legacyInterceptorReqResOrdering":true,"silentJSONParsing":true},"url":"http://127.0.0.1:8000/api/venues/5","xsrfCookieName":"XSRF-TOKEN","xsrfHeaderName":"X-XSRF-TOKEN"},"message":"Request failed with status code 404","name":"AxiosError","stack":"AxiosError: Request failed with status code 404\n    at settle (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:3789:16)\n    at XMLHttpRequest.onloadend (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:4305:225)\n    at Axios.request (http://localhost:3000/_next/static/chunks/node_modules__pnpm_7b3c8ae5._.js:5113:49)\n    at async fetchVenueDetails (http://localhost:3000/_next/static/chunks/src_ac974550._.js:686:25)","status":404}

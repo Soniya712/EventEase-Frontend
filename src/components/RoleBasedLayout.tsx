@@ -185,9 +185,6 @@ export default function RoleBasedLayout({
     { name: 'Dashboard', href: '/admin/dashboard', icon: Home },
     { name: 'Users Management', href: '/admin/users', icon: UsersIcon },
     { name: 'Venues Management', href: '/admin/venues', icon: Building2 },
-    { name: 'Enquiries', href: '/admin/enquiries', icon: MessageCircle },
-    { name: 'Payment Records', href: '/admin/payments', icon: CreditCard },
-    { name: 'System Settings', href: '/admin/settings', icon: Settings },
     { name: 'Profile', href: '/profile', icon: User }, // ✅ added profile
   ];
 
