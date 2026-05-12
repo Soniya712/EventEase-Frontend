@@ -6,7 +6,7 @@ import RoleBasedLayout from "@/components/RoleBasedLayout";
 import { 
   Building2, MapPin, Users, Clock, CheckCircle, XCircle, Eye, 
   Search, Shield, DollarSign, User, Mail, Phone, Calendar,
-  Info, AlertTriangle, Image as ImageIcon, Check, X
+  Info, AlertTriangle, Image as ImageIcon, Check, X, FileText
 } from "lucide-react";
 
 interface VenueApproval {
@@ -24,6 +24,7 @@ interface VenueApproval {
   submitted_at: string;
   primary_image: string;
   amenities: string[];
+  documents: string[];   // ✅ added documents
 }
 
 export default function AdminVenueApprovalsPage() {
@@ -262,9 +263,40 @@ export default function AdminVenueApprovalsPage() {
                       ))}
                     </div>
                   </div>
+
+                  {/* ✅ NEW: Documents section */}
+                  <div>
+                    <h4 className="text-sm font-black uppercase tracking-widest text-blue-600 mb-4 flex items-center gap-2">
+                        <FileText size={16} /> Official Documents
+                    </h4>
+                    {selectedVenue.documents && selectedVenue.documents.length > 0 ? (
+                      <div className="space-y-2">
+                        {selectedVenue.documents.map((doc, idx) => {
+                          const fileName = doc.split('/').pop();
+                          return (
+                            <a
+                              key={idx}
+                              href={getImageUrl(doc)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors"
+                            >
+                              <FileText size={20} className="text-blue-500" />
+                              <span className="text-sm font-medium text-gray-700 truncate flex-1">
+                                {fileName || `Document ${idx + 1}`}
+                              </span>
+                              <Eye size={16} className="text-gray-400" />
+                            </a>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <p className="text-gray-400 italic">No official documents uploaded.</p>
+                    )}
+                  </div>
                 </div>
 
-                {/* Owner Sidebar */}
+                {/* Owner Sidebar (unchanged) */}
                 <div className="space-y-6">
                     <div className="bg-blue-50 p-6 rounded-[32px] border border-blue-100">
                         <h4 className="text-xs font-black uppercase text-blue-600 mb-4">Owner Information</h4>
@@ -302,7 +334,7 @@ export default function AdminVenueApprovalsPage() {
                 </div>
               </div>
 
-              {/* Action Footer (MODAL) */}
+              {/* Action Footer (MODAL) – unchanged */}
               {selectedVenue.status === 'pending' && (
                 <div className="mt-12 pt-10 border-t border-gray-100">
                   <h4 className="text-lg font-bold mb-4">Final Determination</h4>
