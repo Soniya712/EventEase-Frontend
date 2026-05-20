@@ -6,12 +6,10 @@ import axios from "axios";
 import Link from "next/link";
 import RoleBasedLayout from "@/components/RoleBasedLayout";
 import {
-  FileText,
   Calendar,
   MapPin,
   Users,
   DollarSign,
-  Download,
   Printer,
   ChevronLeft,
   CheckCircle,
@@ -113,10 +111,6 @@ export default function InvoiceDetailPage() {
     window.print();
   };
 
-  const handleDownloadPDF = () => {
-    alert("PDF download will be available soon.");
-  };
-
   if (loading) {
     return (
       <RoleBasedLayout userName={userName} userRole="user">
@@ -157,7 +151,7 @@ export default function InvoiceDetailPage() {
   return (
     <RoleBasedLayout userName={userName} userRole="user">
       <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
+        {/* Header with only Print button */}
         <div className="flex justify-between items-center mb-8 print:mb-4">
           <button
             onClick={() => router.back()}
@@ -165,20 +159,12 @@ export default function InvoiceDetailPage() {
           >
             <ChevronLeft size={20} /> Back
           </button>
-          <div className="flex gap-3 print:hidden">
-            <button
-              onClick={handlePrint}
-              className="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-50"
-            >
-              <Printer size={18} /> Print
-            </button>
-            <button
-              onClick={handleDownloadPDF}
-              className="px-4 py-2 bg-pink-600 text-white rounded-lg flex items-center gap-2 hover:bg-pink-700"
-            >
-              <Download size={18} /> Download PDF
-            </button>
-          </div>
+          <button
+            onClick={handlePrint}
+            className="px-4 py-2 border border-gray-300 rounded-lg flex items-center gap-2 hover:bg-gray-50 print:hidden"
+          >
+            <Printer size={18} /> Print
+          </button>
         </div>
 
         {/* Invoice Card */}
@@ -287,7 +273,7 @@ export default function InvoiceDetailPage() {
             {/* Payment History */}
             {booking.payments && booking.payments.length > 0 && (
               <div className="py-8 border-t border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900mb-4">Payment History</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-4">Payment History</h3>
                 <div className="space-y-3">
                   {booking.payments.map((payment) => (
                     <div key={payment.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">

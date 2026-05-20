@@ -21,6 +21,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
+// ✅ Image helper (same as in admin pages)
+const getImageUrl = (path: string | null | undefined) => {
+  if (!path) return "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80";
+  if (path.startsWith('http')) return path;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+  const fullPath = path.startsWith('storage/') ? `/${path}` : `/storage/${path}`;
+  return `${baseUrl}${fullPath}`;
+};
+
 export default function UserDashboard() {
   const router = useRouter();
   const [userName, setUserName] = useState('');
@@ -62,7 +71,7 @@ export default function UserDashboard() {
         b.event_date >= today && b.status !== 'cancelled'
       );
       
-      // Calculate total spent (sum of total_amount for confirmed/completed bookings)
+      // Calculate total spent
       const totalSpent = bookings
         .filter((b: any) => b.status === 'confirmed' || b.status === 'completed')
         .reduce((sum: number, b: any) => sum + (b.total_amount || 0), 0);
@@ -288,7 +297,16 @@ export default function UserDashboard() {
                 {savedVenues.slice(0, 2).map((venue) => (
                   <Link href={`/venues/${venue.id}`} key={venue.id} className="group block">
                     <div className="flex gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
-                      <img src={venue.primary_image || '/placeholder.jpg'} className="w-16 h-16 rounded-lg object-cover" alt={venue.name} />
+                      {/* ✅ Use getImageUrl for the image src */}
+                      <img 
+                        src={getImageUrl(venue.primary_image)} 
+                        className="w-16 h-16 rounded-lg object-cover" 
+                        alt={venue.name} 
+                        onError={(e) => {
+                          // Fallback if image fails to load
+                          (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&q=80";
+                        }}
+                      />
                       <div>
                         <h3 className="font-semibold text-gray-900 group-hover:text-pink-600">{venue.name}</h3>
                         <p className="text-sm text-gray-600">{venue.city}</p>
