@@ -166,24 +166,7 @@ export default function Login() {
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input 
-                  type="checkbox" 
-                  id="remember"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-black focus:ring-pink-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember" className="ml-2 block text-sm text-gray-700">
-                  Remember Me
-                </label>
-              </div>
-              <Link href="/forgot-password" className="text-sm text-black hover:text-pink-800 hover:underline">
-                Forgot Password?
-              </Link>
-            </div>
+            
 
             {/* Login Button */}
             <button 

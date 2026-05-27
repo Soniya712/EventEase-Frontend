@@ -23,6 +23,7 @@
   "/page": "app/page.js",
   "/payments/page": "app/payments/page.js",
   "/profile/page": "app/profile/page.js",
+  "/register/page": "app/register/page.js",
   "/search/page": "app/search/page.js",
   "/venues/[id]/book/page": "app/venues/[id]/book/page.js",
   "/venues/[id]/page": "app/venues/[id]/page.js",
