@@ -255,11 +255,7 @@ export default function VenueDetailPage() {
                     <MapPin size={18} className="text-pink-600" /> {venue.address}, {venue.city}
                   </p>
                 </div>
-                <div className="bg-yellow-50 px-4 py-2 rounded-2xl flex items-center gap-2">
-                  <Star size={20} className="text-yellow-500 fill-yellow-500" />
-                  <span className="font-bold text-lg text-yellow-700">4.8</span>
-                  <span className="text-yellow-600/70 text-sm">(124 reviews)</span>
-                </div>
+               
               </div>
 
               {/* Stats Cards */}

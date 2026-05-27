@@ -113,14 +113,7 @@ export default function Navbar() {
                         <User size={18} />
                         <span>My Profile</span>
                       </Link>
-                      <Link
-                        href="/my-events"
-                        className="flex items-center space-x-2 px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors"
-                        onClick={() => setIsProfileOpen(false)}
-                      >
-                        <Calendar size={18} />
-                        <span>My Events</span>
-                      </Link>
+                    
                       <hr className="my-1" />
                       <button
                         onClick={handleLogout}

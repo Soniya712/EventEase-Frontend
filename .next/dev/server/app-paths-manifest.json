@@ -1,6 +1,7 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
   "/admin/dashboard/page": "app/admin/dashboard/page.js",
+  "/admin/users/create/page": "app/admin/users/create/page.js",
   "/admin/users/page": "app/admin/users/page.js",
   "/admin/venues/approvals/page": "app/admin/venues/approvals/page.js",
   "/admin/venues/page": "app/admin/venues/page.js",
@@ -10,14 +11,20 @@
   "/my-bookings/page": "app/my-bookings/page.js",
   "/my-enquiries/page": "app/my-enquiries/page.js",
   "/my-saved/page": "app/my-saved/page.js",
+  "/notifications/page": "app/notifications/page.js",
   "/owner/bookings/page": "app/owner/bookings/page.js",
   "/owner/dashboard/page": "app/owner/dashboard/page.js",
   "/owner/enquiries/page": "app/owner/enquiries/page.js",
+  "/owner/payments/page": "app/owner/payments/page.js",
+  "/owner/venues/[id]/edit/page": "app/owner/venues/[id]/edit/page.js",
+  "/owner/venues/[id]/page": "app/owner/venues/[id]/page.js",
+  "/owner/venues/create/page": "app/owner/venues/create/page.js",
   "/owner/venues/page": "app/owner/venues/page.js",
   "/page": "app/page.js",
   "/payments/page": "app/payments/page.js",
   "/profile/page": "app/profile/page.js",
   "/search/page": "app/search/page.js",
+  "/venues/[id]/book/page": "app/venues/[id]/book/page.js",
   "/venues/[id]/page": "app/venues/[id]/page.js",
   "/venues/page": "app/venues/page.js"
 }

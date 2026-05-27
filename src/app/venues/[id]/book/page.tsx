@@ -6,8 +6,17 @@ import axios from "axios";
 import RoleBasedLayout from "@/components/RoleBasedLayout";
 import { 
   Calendar, Users, Info, ChevronLeft, 
-  CreditCard, LayoutGrid, MapPin 
+  CreditCard, LayoutGrid, MapPin, AlertCircle
 } from "lucide-react";
+
+// Helper to ensure image URL is absolute
+const getImageUrl = (path: string | null | undefined): string => {
+  if (!path) return "/placeholder.jpg";
+  if (path.startsWith("http")) return path;
+  const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8000";
+  const fullPath = path.startsWith("storage/") ? `/${path}` : `/storage/${path}`;
+  return `${baseUrl}${fullPath}`;
+};
 
 export default function BookingPage() {
   const { id } = useParams();
@@ -69,11 +78,15 @@ export default function BookingPage() {
     const value = e.target.value === '' ? null : parseInt(e.target.value);
     setFormData({ ...formData, guest_count: value });
     
-    // Clear error if valid
-    if (value && value >= 50) {
-      setGuestError('');
-    } else if (value && value < 50) {
-      setGuestError('Minimum 50 guests required');
+    // Validate against venue capacity
+    if (value !== null) {
+      if (value < 50) {
+        setGuestError('Minimum 50 guests required');
+      } else if (venue && value > venue.capacity) {
+        setGuestError(`Maximum guests allowed: ${venue.capacity}`);
+      } else {
+        setGuestError('');
+      }
     } else {
       setGuestError('');
     }
@@ -83,8 +96,16 @@ export default function BookingPage() {
     e.preventDefault();
     
     // Validation
-    if (!formData.guest_count || formData.guest_count < 50) {
+    if (!formData.guest_count) {
+      setGuestError('Please enter number of guests');
+      return;
+    }
+    if (formData.guest_count < 50) {
       setGuestError('Minimum 50 guests required');
+      return;
+    }
+    if (venue && formData.guest_count > venue.capacity) {
+      setGuestError(`Maximum guests allowed: ${venue.capacity}`);
       return;
     }
     
@@ -178,7 +199,9 @@ export default function BookingPage() {
                       />
                     </div>
                     {guestError && (
-                      <p className="text-red-500 text-xs mt-1">{guestError}</p>
+                      <p className="flex items-center gap-1 text-red-500 text-xs mt-1 font-medium">
+                        <AlertCircle size={12} /> {guestError}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -226,7 +249,11 @@ export default function BookingPage() {
               <h2 className="text-xl font-black text-gray-900 mb-8 uppercase tracking-tighter">Summary</h2>
               
               <div className="flex gap-4 mb-8">
-                <img src={venue.primary_image} className="w-16 h-16 rounded-2xl object-cover bg-gray-100 shadow-sm" alt="" />
+                <img 
+                  src={getImageUrl(venue.primary_image)} 
+                  className="w-16 h-16 rounded-2xl object-cover bg-gray-100 shadow-sm" 
+                  alt={venue.name} 
+                />
                 <div>
                   <h3 className="font-bold text-gray-900 leading-tight">{venue.name}</h3>
                   <p className="text-gray-400 text-xs flex items-center gap-1 mt-1 font-bold">

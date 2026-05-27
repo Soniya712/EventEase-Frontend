@@ -21,7 +21,7 @@ interface VenueApproval {
   owner_email: string;
   owner_phone: string;
   status: 'pending' | 'approved' | 'rejected';
-  submitted_at: string;
+  created_at: string;
   primary_image: string;
   amenities: string[];
   documents: string[];   // ✅ added documents
@@ -175,7 +175,7 @@ export default function AdminVenueApprovalsPage() {
                         <div className="p-2 bg-gray-50 rounded-lg"><Calendar size={18} className="text-gray-400" /></div>
                         <div>
                           <p className="text-[10px] uppercase font-bold text-gray-400 leading-none">Submitted</p>
-                          <p className="text-sm font-bold">{new Date(venue.submitted_at).toLocaleDateString()}</p>
+                          <p className="text-sm font-bold">{new Date(venue.created_at).toLocaleDateString()}</p>
                         </div>
                       </div>
                     </div>

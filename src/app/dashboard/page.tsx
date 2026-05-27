@@ -216,14 +216,7 @@ export default function UserDashboard() {
                         <p className="text-sm text-gray-600">{event.guest_count} guests</p>
                       </div>
                     </div>
-                    <div className="flex gap-3 mt-4">
-                      <Link href={`/bookings/${event.id}`} className="flex-1 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 text-center">
-                        View Details
-                      </Link>
-                      <Link href={`/invoices/${event.id}`} className="flex-1 py-2 bg-pink-50 text-pink-700 rounded-lg font-medium hover:bg-pink-100 text-center">
-                        View Invoice
-                      </Link>
-                    </div>
+                    
                   </div>
                 ))}
               </div>
@@ -295,7 +288,7 @@ export default function UserDashboard() {
             ) : (
               <div className="space-y-4">
                 {savedVenues.slice(0, 2).map((venue) => (
-                  <Link href={`/venues/${venue.id}`} key={venue.id} className="group block">
+                  <Link href={`/venues/${venue.venue_id}`} key={venue.id} className="group block">
                     <div className="flex gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors">
                       {/* ✅ Use getImageUrl for the image src */}
                       <img 
@@ -312,10 +305,7 @@ export default function UserDashboard() {
                         <p className="text-sm text-gray-600">{venue.city}</p>
                         <div className="flex items-center justify-between mt-2">
                           <span className="font-bold text-gray-900">₹{venue.price_per_plate}/plate</span>
-                          <div className="flex items-center gap-1">
-                            <Star size={12} className="text-yellow-500 fill-yellow-500" />
-                            <span className="text-sm">{(venue.rating || 4.5).toFixed(1)}</span>
-                          </div>
+                         
                         </div>
                       </div>
                     </div>
@@ -347,17 +337,7 @@ export default function UserDashboard() {
             </div>
           </div>
 
-          {/* Special Offers */}
-          <div className="bg-gradient-to-r from-pink-500 to-purple-500 rounded-xl p-6 text-white">
-            <div className="flex items-center gap-3 mb-4">
-              <MessageSquare className="text-white" size={24} />
-              <h3 className="text-lg font-bold">Need Help?</h3>
-            </div>
-            <p className="text-sm mb-4">Our wedding experts are here 24/7.</p>
-            <button className="w-full py-2 bg-white text-pink-600 font-semibold rounded-lg hover:bg-gray-100">
-              Chat with Support
-            </button>
-          </div>
+        
         </div>
       </div>
     </RoleBasedLayout>

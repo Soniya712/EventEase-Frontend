@@ -43,7 +43,7 @@ export default function EditUserPage() {
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}admin/users/${userId}`, {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/admin/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const user = res.data;

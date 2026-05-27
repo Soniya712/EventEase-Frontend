@@ -30,6 +30,7 @@ interface Venue {
   primary_image: string;
   status: string;
   created_at: string;
+  booking_count: number;
 }
 
 export default function OwnerVenueDetailPage() {
@@ -242,7 +243,7 @@ export default function OwnerVenueDetailPage() {
             <div className="mt-10 pt-10 border-t border-gray-100">
                <div className="bg-gradient-to-br from-gray-900 to-blue-900 p-6 rounded-3xl text-white text-center shadow-lg shadow-blue-900/20">
                   <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Performance</p>
-                  <p className="text-3xl font-black mb-1">0</p>
+                  <p className="text-3xl font-black mb-1">{venue.booking_count}</p>
                   <p className="text-xs font-bold opacity-80 uppercase tracking-tighter">Total Bookings</p>
                </div>
             </div>
